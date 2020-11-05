@@ -1,13 +1,14 @@
 ﻿namespace NebulaMigration
 {
     using System;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
     using NebulaMigration.Configuration;
     using NebulaMigration.Models;
     using NebulaMigration.Options;
 
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext<User>
     {
         private readonly string connectionString;
 
@@ -18,6 +19,7 @@
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
+            //Database.EnsureCreated();
         }
 
         /// <summary>

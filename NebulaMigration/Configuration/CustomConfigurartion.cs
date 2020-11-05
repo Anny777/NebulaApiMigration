@@ -43,7 +43,7 @@
             .IsRequired();
 
             builder
-            .Property<ApplicationUser>("user")
+            .Property<User>("user")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("User")
             .IsRequired();

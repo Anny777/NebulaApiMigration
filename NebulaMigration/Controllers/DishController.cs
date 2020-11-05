@@ -30,9 +30,9 @@ namespace NebulaMigration.Controllers
         /// Получение списка блюд
         /// /// </summary>
         /// <returns></returns>
-        [HttpGet("List")]
+        [HttpGet]
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
-        public ActionResult<List<DishViewModel>> List()
+        public ActionResult<List<DishViewModel>> Get()
         {
             return this.db.Dishes.Select(c => new DishViewModel()
             {
@@ -78,9 +78,9 @@ namespace NebulaMigration.Controllers
         /// <param name="dish">объект блюда</param>
         /// <param name="idOrder">идентификатор заказа</param>
         /// <returns></returns>
-        [HttpPost("AddDish")]
+        [HttpPost]
         [Authorize(Roles = "Admin, Bartender, Waiter")]
-        public ActionResult AddDish(DishViewModel dish, int idOrder)
+        public ActionResult Post(DishViewModel dish, int idOrder)
         {
             try
             {
@@ -92,17 +92,16 @@ namespace NebulaMigration.Controllers
                 db.SaveChanges();
                 return Ok(custom.ToViewModel());
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpPost]
-        [Route("Sync")]
+        [HttpPost("Sync")]
         public ActionResult Sync(SyncModel data, string token)
         {
-            if (!string.Equals("d3a71c3d-abd2-4833-9686-e5c8818c9054", token, System.StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals("d3a71c3d-abd2-4833-9686-e5c8818c9054", token, StringComparison.InvariantCultureIgnoreCase))
                 return BadRequest("Доступ запрещен");
 
             if (data == null)

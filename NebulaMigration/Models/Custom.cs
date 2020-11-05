@@ -11,7 +11,7 @@
         DateTime createdDate;
         List<CookingDish> cookingDishes;
         bool isOpened;
-        ApplicationUser user;
+        User user;
         bool isExportRequested;
         int tableNumber;
         string comment;
@@ -20,8 +20,6 @@
             bool isActive,
             List<CookingDish> cookingDishes,
             bool isOpened,
-            ApplicationUser user,
-            bool isExportRequested,
             int tableNumber,
             string comment)
         {
@@ -29,8 +27,6 @@
             this.createdDate = DateTime.Now;
             this.cookingDishes = cookingDishes;
             this.isOpened = isOpened;
-            this.user = user;
-            this.isExportRequested = isExportRequested;
             this.tableNumber = tableNumber;
             this.comment = comment;
         }
@@ -40,10 +36,25 @@
         public DateTime CreatedDate => this.createdDate;
         public ICollection<CookingDish> CookingDishes => this.cookingDishes;
         public bool IsOpened => this.isOpened;
-        public ApplicationUser User => this.user;
+        public User User => this.user;
         public bool IsExportRequested => this.isExportRequested;
         public int TableNumber => this.tableNumber;
         public string Comment => this.comment;
+
+        public void CloseOrder()
+        {
+            this.isOpened = false;
+        }
+
+        public void SetStatusExportRequested(bool status)
+        {
+            this.isExportRequested = status;
+        }
+
+        public void SetComment(string comment)
+        {
+            this.comment += $" {comment}";
+        }
 
         public OrderViewModel ToViewModel()
         {

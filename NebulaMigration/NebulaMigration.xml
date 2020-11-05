@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NebulaMigration</name>
+    </assembly>
+    <members>
+        <member name="M:NebulaMigration.ApplicationContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{NebulaMigration.ApplicationContext})">
+            <summary>
+            Initializes a new instance of the <see cref="T:NebulaMigration.ApplicationContext"/> class.
+            </summary>
+            <param name="options">Options.</param>
+        </member>
+        <member name="M:NebulaMigration.ApplicationContext.#ctor(Microsoft.Extensions.Options.IOptions{NebulaMigration.Options.NebulaApiOptions})">
+            <summary>
+            Initializes a new instance of the <see cref="T:NebulaMigration.ApplicationContext"/> class.
+            </summary>
+            <param name="options">The options.</param>
+        </member>
+        <member name="M:NebulaMigration.ApplicationContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <inheritdoc/>
+        </member>
+        <member name="M:NebulaMigration.Controllers.DishController.Get">
+            <summary>
+            Получение списка блюд
+            /// </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.DishController.SetState(System.Int32,NebulaMigration.Models.Enums.DishState)">
+            <summary>
+            Смена состояния блюда на готовое
+            </summary>
+            <param name="id">идентификатор блюда</param>
+            <param name="dishState">статус блюда</param>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.DishController.Post(NebulaMigration.ViewModels.DishViewModel,System.Int32)">
+            <summary>
+            Добавление блюда
+            </summary>
+            <param name="dish">объект блюда</param>
+            <param name="idOrder">идентификатор заказа</param>
+            <returns></returns>
+        </member>
+        <member name="P:NebulaMigration.Models.ResetPasswordViewModel.UserId">
+            <summary>
+            Gets or sets the user identifier.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.ResetPasswordViewModel.Token">
+            <summary>
+            Gets or sets the token.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.ResetPasswordViewModel.NewPassword">
+            <summary>
+            Gets or sets of new password.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Options.NebulaApiOptions.SecurityKey">
+            <summary>
+            Gets or sets the security key.
+            </summary>
+            <value>
+            The security key.
+            </value>
+        </member>
+        <member name="P:NebulaMigration.Options.NebulaApiOptions.ConnectionString">
+            <summary>
+            Gets or sets the connection string.
+            </summary>
+            <value>
+            The connection string.
+            </value>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.DishViewModel.CookingDishId">
+            <summary>
+            Идентификатор заказанного блюда
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.DishViewModel.Name">
+            <summary>
+            Название блюда
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.DishViewModel.Consist">
+            <summary>
+            Состав блюда
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.DishViewModel.Unit">
+            <summary>
+            Единица измерения
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.DishViewModel.State">
+            <summary>
+            Состояние блюда
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.DishViewModel.Comment">
+            <summary>
+            Комментарий к блюду
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.DishViewModel.WorkshopType">
+            <summary>
+            Цех
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.DishViewModel.Price">
+            <summary>
+            Цена блюда
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.OrderViewModel.Id">
+            <summary>
+            Идентификатор заказа
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.OrderViewModel.Dishes">
+            <summary>
+            Коллекция блюд
+            </summary>
+        </member>
+        <member name="F:NebulaMigration.ViewModels.OrderViewModel.Table">
+            <summary>
+            Номер стола
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.OrderViewModel.CreatedDate">
+            <summary>
+            Дата создания
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.OrderViewModel.Comment">
+            <summary>
+            Комментарий к заказу
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.OrderViewModel.IsExportRequested">
+            <summary>
+            Флаг экспорта заказа во внешнюю систему
+            </summary>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.Get(System.Int32)">
+            <summary>
+            Получение заказа по номеру стола
+            </summary>
+            <param name="table">номер стола</param>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.Post(NebulaMigration.ViewModels.OrderViewModel)">
+            <summary>
+            Создание нового заказа
+            </summary>
+            <param name="order">заказ</param>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.GetOpenedOrder">
+            <summary>
+            Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.Close(System.Int32)">
+            <summary>
+            Закрытие заказа 
+            </summary>
+            <param name="tableNumber">номер стола</param>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.AddComment(NebulaMigration.ViewModels.OrderViewModel)">
+            <summary>
+            Добавление комментария к заказу
+            </summary>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.SetExportOrder(System.Int32)">
+            <summary>
+            Проставление флага заказу для его синхронизации
+            </summary>
+            <param name="tableNumber"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
