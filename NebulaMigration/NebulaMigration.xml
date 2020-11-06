@@ -56,6 +56,11 @@
             Gets or sets of new password.
             </summary>
         </member>
+        <member name="T:NebulaMigration.Options.NebulaApiOptions">
+            <summary>
+            NebulaApiOptions.
+            </summary>
+        </member>
         <member name="P:NebulaMigration.Options.NebulaApiOptions.SecurityKey">
             <summary>
             Gets or sets the security key.
@@ -85,6 +90,26 @@
         <member name="M:NebulaMigration.Program.CreateHostBuilder(System.String[])">
             <summary>
             Create host builder.
+            </summary>
+        </member>
+        <member name="T:NebulaMigration.Startup">
+            <summary>
+            Startup.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ConfigureServices.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Configure.
             </summary>
         </member>
         <member name="F:NebulaMigration.ViewModels.DishViewModel.CookingDishId">

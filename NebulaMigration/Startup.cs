@@ -12,22 +12,32 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NebulaMigration.Models;
 using NebulaMigration.Options;
+using Infrastructure.Configuration;
 
 namespace NebulaMigration
 {
+    /// <summary>
+    /// Startup.
+    /// </summary>
     public class Startup
     {
+        private readonly IConfiguration configuration;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            this.configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
+        /// <summary>
+        /// ConfigureServices.
+        /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<NebulaApiOptions>(this.Configuration);
-            services.Configure<NebulaAuthorizationOptions>(this.Configuration);
+            services.ConfigureEagerly<NebulaApiOptions>(this.configuration);
+            services.ConfigureEagerly<NebulaAuthorizationOptions>(this.configuration);
             services.AddScoped<ApplicationContext>();
 
             services
@@ -41,7 +51,7 @@ namespace NebulaMigration
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "nebula",
                         ValidAudience = "nebula",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Configuration.GetSection("NebulaApiOptions:SecurityKey").Value)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration.GetSection("NebulaApiOptions:SecurityKey").Value)),
                     };
                 });
 
@@ -74,6 +84,9 @@ namespace NebulaMigration
             });
         }
 
+        /// <summary>
+        /// Configure.
+        /// </summary>
         public void Configure(IApplicationBuilder app)
         {
             if (app == null)
