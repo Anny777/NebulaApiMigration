@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NebulaMigration.Models;
 using NebulaMigration.Models.Enums;
 using NebulaMigration.ViewModels;
-using NebulaSync.ExternalModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

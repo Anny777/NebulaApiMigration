@@ -2,7 +2,6 @@
 {
     using System;
     using NebulaMigration.Models.Enums;
-    using NebulaSync.ExternalModels;
 
     public class Category
     {
