@@ -6,13 +6,6 @@
 
     public class CookingDish
     {
-        bool isActive;
-        DateTime createdDate;
-        Dish dish;
-        DishState dishState;
-        Custom custom;
-        string comment;
-
         public CookingDish()
         {
 
@@ -24,24 +17,24 @@
             DishState dishState,
             string comment)
         {
-            this.isActive = isActive;
-            this.createdDate = DateTime.Now;
-            this.dish = dish;
-            this.dishState = dishState;
-            this.comment = comment;
+            this.IsActive = isActive;
+            this.CreatedDate = DateTime.Now;
+            this.Dish = dish;
+            this.DishState = dishState;
+            this.Comment = comment;
         }
 
         public Guid Id { get; set; }
-        public bool IsActive => this.isActive;
-        public DateTime CreatedDate => this.createdDate;
-        public Dish Dish => this.dish;
-        public DishState DishState => this.dishState;
-        public Custom Custom => this.custom;
-        public string Comment => this.comment;
+        public bool IsActive { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public Dish Dish { get; set; }
+        public DishState DishState { get; set; }
+        public Custom Custom { get; set; }
+        public string Comment { get; set; }
 
         public void SetState(DishState dishState)
         {
-            this.dishState = dishState;
+            this.DishState = dishState;
         }
 
         public DishViewModel ToViewModel()

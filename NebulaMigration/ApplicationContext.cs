@@ -28,7 +28,7 @@
                 throw new InvalidOperationException();
             }
 
-            this.Database.Migrate();
+            this.Database.EnsureCreated();
         }
 
         public virtual DbSet<Dish> Dishes { get; set; }
