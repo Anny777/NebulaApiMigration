@@ -71,6 +71,8 @@ namespace NebulaMigration
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
+            services.AddDbContext<ApplicationContext>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Nebula API", Version = "v1" });

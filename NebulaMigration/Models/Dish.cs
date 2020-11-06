@@ -14,6 +14,11 @@
         Category category;
         int externalId;
 
+        public Dish()
+        {
+
+        }
+
         public Dish(
             bool isActive,
             string consist,
