@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Infrastructure.Configuration</name>
+    </assembly>
+    <members>
+        <member name="M:Infrastructure.Configuration.ConfigurationHelper.ConfigureEagerly``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Configures the eagerly.
+            </summary>
+            <typeparam name="T">Type of options.</typeparam>
+            <param name="sc">The sc.</param>
+            <param name="configuration">The configuration.</param>
+            <exception cref="T:System.InvalidOperationException">When section has empty values.</exception>
+        </member>
+    </members>
+</doc>

@@ -2,6 +2,9 @@
 
 namespace NebulaMigration.Options
 {
+    /// <summary>
+    /// NebulaApiOptions.
+    /// </summary>
     public class NebulaApiOptions
     {
         /// <summary>
@@ -10,7 +13,6 @@ namespace NebulaMigration.Options
         /// <value>
         /// The security key.
         /// </value>
-        [Required]
         public string SecurityKey { get; set; }
 
         /// <summary>
@@ -19,7 +21,6 @@ namespace NebulaMigration.Options
         /// <value>
         /// The connection string.
         /// </value>
-        [Required]
         public string ConnectionString { get; set; }
     }
 }
