@@ -56,33 +56,17 @@ namespace NebulaMigration.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    ExternalId = table.Column<int>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(nullable: true),
+                    WorkshopType = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Customs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Dishes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Dishes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,11 +176,66 @@ namespace NebulaMigration.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Customs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    IsOpened = table.Column<bool>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    IsExportRequested = table.Column<bool>(nullable: false),
+                    TableNumber = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Customs_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dishes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExternalId = table.Column<int>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: true),
+                    Consist = table.Column<string>(nullable: true),
+                    Unit = table.Column<string>(nullable: true),
+                    IsAvailable = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Price = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dishes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Dishes_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CookingDishes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    CustomId = table.Column<Guid>(nullable: true)
+                    IsActive = table.Column<bool>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    DishId = table.Column<Guid>(nullable: true),
+                    DishState = table.Column<int>(nullable: false),
+                    CustomId = table.Column<Guid>(nullable: true),
+                    Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,6 +244,12 @@ namespace NebulaMigration.Migrations
                         name: "FK_CookingDishes_Customs_CustomId",
                         column: x => x.CustomId,
                         principalTable: "Customs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CookingDishes_Dishes_DishId",
+                        column: x => x.DishId,
+                        principalTable: "Dishes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -252,6 +297,21 @@ namespace NebulaMigration.Migrations
                 name: "IX_CookingDishes_CustomId",
                 table: "CookingDishes",
                 column: "CustomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CookingDishes_DishId",
+                table: "CookingDishes",
+                column: "DishId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customs_UserId",
+                table: "Customs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dishes_CategoryId",
+                table: "Dishes",
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -272,22 +332,22 @@ namespace NebulaMigration.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
                 name: "CookingDishes");
-
-            migrationBuilder.DropTable(
-                name: "Dishes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Customs");
+
+            migrationBuilder.DropTable(
+                name: "Dishes");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Customs");
+                name: "Categories");
         }
     }
 }

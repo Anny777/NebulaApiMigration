@@ -10,7 +10,7 @@ using NebulaMigration;
 namespace NebulaMigration.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20201106192256_InitialCreate")]
+    [Migration("20201106204441_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,24 @@ namespace NebulaMigration.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExternalId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorkshopType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -169,12 +187,29 @@ namespace NebulaMigration.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid?>("CustomId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DishId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DishState")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomId");
+
+                    b.HasIndex("DishId");
 
                     b.ToTable("CookingDishes");
                 });
@@ -185,7 +220,30 @@ namespace NebulaMigration.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsExportRequested")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOpened")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TableNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Customs");
                 });
@@ -196,7 +254,36 @@ namespace NebulaMigration.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Consist")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExternalId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Dishes");
                 });
@@ -337,9 +424,27 @@ namespace NebulaMigration.Migrations
 
             modelBuilder.Entity("NebulaMigration.Models.CookingDish", b =>
                 {
-                    b.HasOne("NebulaMigration.Models.Custom", null)
+                    b.HasOne("NebulaMigration.Models.Custom", "Custom")
                         .WithMany("CookingDishes")
                         .HasForeignKey("CustomId");
+
+                    b.HasOne("NebulaMigration.Models.Dish", "Dish")
+                        .WithMany()
+                        .HasForeignKey("DishId");
+                });
+
+            modelBuilder.Entity("NebulaMigration.Models.Custom", b =>
+                {
+                    b.HasOne("NebulaMigration.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("NebulaMigration.Models.Dish", b =>
+                {
+                    b.HasOne("NebulaMigration.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
                 });
 #pragma warning restore 612, 618
         }

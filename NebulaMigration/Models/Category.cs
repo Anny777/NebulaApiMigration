@@ -5,13 +5,6 @@
 
     public class Category
     {
-        bool isActive;
-        DateTime createdDate;
-        string name;
-        string code;
-        WorkshopType workshopType;
-        int externalId;
-
         public Category()
         {
 
@@ -24,31 +17,31 @@
             WorkshopType workshopType,
             int externalId)
         {
-            this.isActive = isActive;
-            this.createdDate = DateTime.Now;
-            this.name = name;
-            this.code = code;
-            this.workshopType = workshopType;
-            this.externalId = externalId;
+            this.IsActive = isActive;
+            this.CreatedDate = DateTime.Now;
+            this.Name = name;
+            this.Code = code;
+            this.WorkshopType = workshopType;
+            this.ExternalId = externalId;
         }
         public Guid Id { get; set; }
-        public int ExternalId => this.externalId;
-        public bool IsActive => this.isActive;
-        public DateTime CreatedDate => this.createdDate;
-        public string Name => this.name;
-        public string Code => this.code;
-        public WorkshopType WorkshopType => this.workshopType;
+        public int ExternalId { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public WorkshopType WorkshopType { get; set; }
 
         public void SetActive(bool isActive)
         {
-            this.isActive = isActive;
+            this.IsActive = isActive;
         }
 
         public void ChangeCategory(GoodsGroup goodsGroup)
         {
-            this.externalId = goodsGroup.ID;
-            this.name = goodsGroup.Name;
-            this.code = goodsGroup.Code;
+            this.ExternalId = goodsGroup.ID;
+            this.Name = goodsGroup.Name;
+            this.Code = goodsGroup.Code;
             this.SetActive(true);
         }
     }

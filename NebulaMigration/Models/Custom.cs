@@ -7,15 +7,6 @@
 
     public class Custom
     {
-        bool isActive;
-        DateTime createdDate;
-        IEnumerable<CookingDish> cookingDishes;
-        bool isOpened;
-        User user;
-        bool isExportRequested;
-        int tableNumber;
-        string comment;
-
         public Custom()
         {
 
@@ -27,37 +18,37 @@
             int tableNumber,
             string comment)
         {
-            this.isActive = isActive;
-            this.createdDate = DateTime.Now;
-            this.cookingDishes = new List<CookingDish>();
-            this.isOpened = isOpened;
-            this.tableNumber = tableNumber;
-            this.comment = comment;
+            this.IsActive = isActive;
+            this.CreatedDate = DateTime.Now;
+            this.CookingDishes = new List<CookingDish>();
+            this.IsOpened = isOpened;
+            this.TableNumber = tableNumber;
+            this.Comment = comment;
         }
 
         public Guid Id { get; set; }
-        public bool IsActive => this.isActive;
-        public DateTime CreatedDate => this.createdDate;
-        public IEnumerable<CookingDish> CookingDishes => this.cookingDishes;
-        public bool IsOpened => this.isOpened;
-        public User User => this.user;
-        public bool IsExportRequested => this.isExportRequested;
-        public int TableNumber => this.tableNumber;
-        public string Comment => this.comment;
+        public bool IsActive { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public IEnumerable<CookingDish> CookingDishes { get; set; }
+        public bool IsOpened { get; set; }
+        public User User { get; set; }
+        public bool IsExportRequested { get; set; }
+        public int TableNumber { get; set; }
+        public string Comment { get; set; }
 
         public void CloseOrder()
         {
-            this.isOpened = false;
+            this.IsOpened = false;
         }
 
         public void SetStatusExportRequested(bool status)
         {
-            this.isExportRequested = status;
+            this.IsExportRequested = status;
         }
 
         public void SetComment(string comment)
         {
-            this.comment += $" {comment}";
+            this.Comment += $" {comment}";
         }
 
         public OrderViewModel ToViewModel()
