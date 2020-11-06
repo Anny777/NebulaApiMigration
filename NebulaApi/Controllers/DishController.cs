@@ -4,7 +4,6 @@ using System.Web.Http;
 using NebulaApi.ViewModels;
 using System.Web.Http.Cors;
 using ProjectOrderFood.Enums;
-using NebulaSync.ExternalModels;
 
 namespace NebulaApi.Controllers
 {

@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NebulaMigration", "NebulaMigration\NebulaMigration.csproj", "{83BDECC2-0641-4952-913D-A7BE6CA872EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NebulaSync", "..\NebulaApi\NebulaSync\NebulaSync.csproj", "{BBCD0B92-EEC6-4B38-A569-4ECCB9CF695F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NebulaApi", "NebulaApi\NebulaApi.csproj", "{53E7B6B0-6DAB-4B0C-91B8-706991E4AE5F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,14 +15,6 @@ Global
 		{83BDECC2-0641-4952-913D-A7BE6CA872EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83BDECC2-0641-4952-913D-A7BE6CA872EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83BDECC2-0641-4952-913D-A7BE6CA872EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBCD0B92-EEC6-4B38-A569-4ECCB9CF695F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBCD0B92-EEC6-4B38-A569-4ECCB9CF695F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBCD0B92-EEC6-4B38-A569-4ECCB9CF695F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBCD0B92-EEC6-4B38-A569-4ECCB9CF695F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{53E7B6B0-6DAB-4B0C-91B8-706991E4AE5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{53E7B6B0-6DAB-4B0C-91B8-706991E4AE5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{53E7B6B0-6DAB-4B0C-91B8-706991E4AE5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{53E7B6B0-6DAB-4B0C-91B8-706991E4AE5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

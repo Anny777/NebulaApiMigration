@@ -404,12 +404,6 @@
       <DependentUpon>201901061124177__6.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\NebulaApi\NebulaSync\NebulaSync.csproj">
-      <Project>{BBCD0B92-EEC6-4B38-A569-4ECCB9CF695F}</Project>
-      <Name>NebulaSync</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

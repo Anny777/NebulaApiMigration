@@ -1,6 +1,5 @@
 ﻿namespace NebulaMigration.Models
 {
-    using NebulaSync.ExternalModels;
     using System;
 
     public class Dish
