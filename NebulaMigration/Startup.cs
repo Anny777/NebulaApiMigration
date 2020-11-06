@@ -103,7 +103,7 @@ namespace NebulaMigration
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
