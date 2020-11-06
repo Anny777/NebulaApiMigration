@@ -12,6 +12,11 @@
         WorkshopType workshopType;
         int externalId;
 
+        public Category()
+        {
+
+        }
+
         public Category(
             bool isActive,
             string name,
@@ -39,7 +44,7 @@
             this.isActive = isActive;
         }
 
-        public void ChangeCategory(GoodsGroup goodsGroup) 
+        public void ChangeCategory(GoodsGroup goodsGroup)
         {
             this.externalId = goodsGroup.ID;
             this.name = goodsGroup.Name;

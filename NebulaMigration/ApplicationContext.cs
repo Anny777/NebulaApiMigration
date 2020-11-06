@@ -4,7 +4,6 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
-    using NebulaMigration.Configuration;
     using NebulaMigration.Models;
     using NebulaMigration.Options;
 
@@ -15,25 +14,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationContext"/> class.
         /// </summary>
-        /// <param name="options">Options.</param>
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
-            : base(options)
-        {
-            //Database.EnsureCreated();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationContext"/> class.
-        /// </summary>
         /// <param name="options">The options.</param>
-        public ApplicationContext(IOptions<NebulaApiOptions> options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options, IOptions<NebulaApiOptions> optionsNebula) : base(options)
         {
-            if (options?.Value == null)
+            if (optionsNebula?.Value == null)
             {
                 throw new ArgumentNullException(nameof(options));
             }
 
-            this.connectionString = options.Value.ConnectionString;
+            this.connectionString = optionsNebula.Value.ConnectionString;
             if (string.IsNullOrWhiteSpace(this.connectionString))
             {
                 throw new InvalidOperationException();
@@ -42,23 +31,10 @@
             this.Database.Migrate();
         }
 
-        public DbSet<Dish> Dishes { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<CookingDish> CookingDishes { get; set; }
-        public DbSet<Custom> Customs { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            if (modelBuilder == null)
-            {
-                throw new ArgumentNullException(nameof(modelBuilder));
-            }
-
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new CookingDishConfiguration());
-            modelBuilder.ApplyConfiguration(new CustomConfigurartion());
-            modelBuilder.ApplyConfiguration(new DishConfiguration());
-            base.OnModelCreating(modelBuilder);
-        }
+        public virtual DbSet<Dish> Dishes { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<CookingDish> CookingDishes { get; set; }
+        public virtual DbSet<Custom> Customs { get; set; }
 
         /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

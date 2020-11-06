@@ -13,6 +13,11 @@
         Custom custom;
         string comment;
 
+        public CookingDish()
+        {
+
+        }
+
         public CookingDish(
             bool isActive,
             Dish dish,

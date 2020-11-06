@@ -9,23 +9,27 @@
     {
         bool isActive;
         DateTime createdDate;
-        List<CookingDish> cookingDishes;
+        IEnumerable<CookingDish> cookingDishes;
         bool isOpened;
         User user;
         bool isExportRequested;
         int tableNumber;
         string comment;
 
+        public Custom()
+        {
+
+        }
+
         public Custom(
             bool isActive,
-            List<CookingDish> cookingDishes,
             bool isOpened,
             int tableNumber,
             string comment)
         {
             this.isActive = isActive;
             this.createdDate = DateTime.Now;
-            this.cookingDishes = cookingDishes;
+            this.cookingDishes = new List<CookingDish>();
             this.isOpened = isOpened;
             this.tableNumber = tableNumber;
             this.comment = comment;
@@ -34,7 +38,7 @@
         public Guid Id { get; set; }
         public bool IsActive => this.isActive;
         public DateTime CreatedDate => this.createdDate;
-        public ICollection<CookingDish> CookingDishes => this.cookingDishes;
+        public IEnumerable<CookingDish> CookingDishes => this.cookingDishes;
         public bool IsOpened => this.isOpened;
         public User User => this.user;
         public bool IsExportRequested => this.isExportRequested;

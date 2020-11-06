@@ -56,7 +56,7 @@ namespace NebulaApi.Controllers
                 return this.BadRequest("Не получены необходимые данные");
             }
 
-            this.db.Customs.Add(new Custom(true, new List<CookingDish>(), true, order.Table, order.Comment));
+            this.db.Customs.Add(new Custom(true, true, order.Table, order.Comment));
             db.SaveChanges();
             return Ok();
         }

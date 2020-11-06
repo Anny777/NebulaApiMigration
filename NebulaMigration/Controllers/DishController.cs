@@ -30,7 +30,8 @@ namespace NebulaMigration.Controllers
         /// /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
         public ActionResult<List<DishViewModel>> Get()
         {
             return this.db.Dishes.Select(c => new DishViewModel()
@@ -78,7 +79,7 @@ namespace NebulaMigration.Controllers
         /// <param name="idOrder">идентификатор заказа</param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles = "Admin, Bartender, Waiter")]
+        //[Authorize(Roles = "Admin, Bartender, Waiter")]
         public ActionResult Post(DishViewModel dish, int idOrder)
         {
             try
@@ -87,7 +88,7 @@ namespace NebulaMigration.Controllers
                 var currentDish = db.Dishes.Find(dish.Id);
 
                 var newDish = new CookingDish(true, currentDish, DishState.InWork, dish.Comment);
-                custom.CookingDishes.Add(newDish);
+                custom.CookingDishes.ToList().Add(newDish);
                 db.SaveChanges();
                 return Ok(custom.ToViewModel());
             }

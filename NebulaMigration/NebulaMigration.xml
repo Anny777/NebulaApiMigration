@@ -4,13 +4,7 @@
         <name>NebulaMigration</name>
     </assembly>
     <members>
-        <member name="M:NebulaMigration.ApplicationContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{NebulaMigration.ApplicationContext})">
-            <summary>
-            Initializes a new instance of the <see cref="T:NebulaMigration.ApplicationContext"/> class.
-            </summary>
-            <param name="options">Options.</param>
-        </member>
-        <member name="M:NebulaMigration.ApplicationContext.#ctor(Microsoft.Extensions.Options.IOptions{NebulaMigration.Options.NebulaApiOptions})">
+        <member name="M:NebulaMigration.ApplicationContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{NebulaMigration.ApplicationContext},Microsoft.Extensions.Options.IOptions{NebulaMigration.Options.NebulaApiOptions})">
             <summary>
             Initializes a new instance of the <see cref="T:NebulaMigration.ApplicationContext"/> class.
             </summary>
