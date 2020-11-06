@@ -72,6 +72,21 @@
             The connection string.
             </value>
         </member>
+        <member name="T:NebulaMigration.Program">
+            <summary>
+            Program.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Program.Main(System.String[])">
+            <summary>
+            Entry point.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Create host builder.
+            </summary>
+        </member>
         <member name="F:NebulaMigration.ViewModels.DishViewModel.CookingDishId">
             <summary>
             Идентификатор заказанного блюда
