@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace NebulaMigration.Models
+﻿namespace NebulaMigration.Models
 {
+    using Microsoft.AspNetCore.Identity;
+
     public class User : IdentityUser
     {
         public int OperatorId { get; set; }

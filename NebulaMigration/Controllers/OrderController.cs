@@ -1,13 +1,11 @@
-﻿
-
-namespace NebulaApi.Controllers
+﻿namespace NebulaApi.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+    using Microsoft.EntityFrameworkCore;
     using NebulaMigration;
     using NebulaMigration.Models;
     using NebulaMigration.Models.Enums;
@@ -25,6 +23,18 @@ namespace NebulaApi.Controllers
         }
 
         /// <summary>
+        /// Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet()]
+        [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
+        public async Task<ActionResult<OrderViewModel[]>> Get()
+        {
+            var orders = this.db.Customs.Include(i => i.CookingDishes).Where(c => c.IsOpened).ToList().Select(c => c.ToViewModel());
+            return this.Ok(orders);
+        }
+
+        /// <summary>
         /// Получение заказа по номеру стола
         /// </summary>
         /// <param name="table">номер стола</param>
@@ -34,12 +44,7 @@ namespace NebulaApi.Controllers
         public ActionResult<Custom> Get(int table)
         {
             var order = this.db.Customs.FirstOrDefault(o => o.IsActive && o.IsOpened && o.TableNumber == table);
-            if (order == null)
-            {
-                return NotFound("Заказ не найден");
-            }
-
-            return Ok(order.ToViewModel());
+            return order == null ? this.NotFound() : (ActionResult<Custom>)this.Ok(order.ToViewModel());
         }
 
         /// <summary>
@@ -59,18 +64,6 @@ namespace NebulaApi.Controllers
             this.db.Customs.Add(new Custom(true, true, order.Table, order.Comment));
             db.SaveChanges();
             return Ok();
-        }
-
-        /// <summary>
-        /// Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetOpenedOrders")]
-        [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
-        public ActionResult<OrderViewModel[]> GetOpenedOrder()
-        {
-            var orders = this.db.Customs.Where(c => c.IsOpened).ToList().Select(c => c.ToViewModel());
-            return Ok(orders);
         }
 
         /// <summary>

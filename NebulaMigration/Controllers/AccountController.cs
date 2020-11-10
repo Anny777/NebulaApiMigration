@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -18,12 +14,15 @@ using NebulaMigration.Options;
 
 namespace NebulaMigration.Controllers
 {
+    /// <summary>
+    /// AccountController.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly NebulaAuthorizationOptions nebulaAuthorizationOptions;
-        private UserManager<User> userManager;
+        private readonly UserManager<User> userManager;
 
         public AccountController(
             IOptions<NebulaAuthorizationOptions> nebulaApiOptions,
@@ -77,7 +76,7 @@ namespace NebulaMigration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.BadRequest(ModelState);
             }
 
             var user = await this.userManager.FindByIdAsync(model.UserId).ConfigureAwait(false);
@@ -88,12 +87,7 @@ namespace NebulaMigration.Controllers
 
             var result = await this.userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
 
-            if (!result.Succeeded)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok();
+            return !result.Succeeded ? this.BadRequest(result) : (ActionResult)this.Ok();
         }
     }
 }
