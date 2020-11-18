@@ -80,7 +80,7 @@ namespace NebulaMigration.Controllers
         /// <returns></returns>
         [HttpPost]
         //[Authorize(Roles = "Admin, Bartender, Waiter")]
-        public ActionResult Post(DishViewModel dish, int idOrder)
+        public ActionResult<OrderViewModel> Post(DishViewModel dish, int idOrder)
         {
             try
             {

@@ -4,6 +4,6 @@
 
     public class NebulaAuthorizationOptions
     {
-        public SymmetricSecurityKey SymmetricSecurityKey { get; set; }
+        public string SymmetricSecurityKey { get; set; }
     }
 }

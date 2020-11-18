@@ -5,16 +5,19 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NebulaMigration.Models;
 using NebulaMigration.Options;
+using NebulaMigration.ViewModels;
 
 namespace NebulaMigration.Controllers
 {
@@ -69,7 +72,31 @@ namespace NebulaMigration.Controllers
                 notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddDays(14),
                 issuedAt: null,
-                signingCredentials: new SigningCredentials(this.nebulaAuthorizationOptions.SymmetricSecurityKey, SecurityAlgorithms.HmacSha256));
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(this.nebulaAuthorizationOptions.SymmetricSecurityKey)), SecurityAlgorithms.HmacSha256));
+        }
+
+        /// <summary>
+        /// Gets the user information.
+        /// </summary>
+        /// <returns>Action result.</returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet("GetUserInfo")]
+        public async Task<ActionResult> GetUserInfo()
+        {
+            var user = await this.userManager.FindByEmailAsync(User.Identity.Name).ConfigureAwait(false);
+            if (user == null) 
+            {
+                return this.BadRequest();
+            }
+            var roles = await this.userManager.GetRolesAsync(user).ConfigureAwait(false);
+            var userInfo = new UserInfoViewModel
+            {
+                Email = User.Identity.Name,
+                Roles = roles,
+                HasRegistered = true,
+            };
+            return this.Ok(userInfo);
         }
 
         [HttpPost("ChangePassword")]

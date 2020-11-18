@@ -13,6 +13,12 @@
         <member name="M:NebulaMigration.ApplicationContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
             <inheritdoc/>
         </member>
+        <member name="M:NebulaMigration.Controllers.AccountController.GetUserInfo">
+            <summary>
+            Gets the user information.
+            </summary>
+            <returns>Action result.</returns>
+        </member>
         <member name="M:NebulaMigration.Controllers.DishController.Get">
             <summary>
             Получение списка блюд
