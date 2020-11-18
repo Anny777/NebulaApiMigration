@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using NebulaMigration.Models;
-using NebulaMigration.Options;
-
-namespace NebulaMigration.Controllers
+﻿namespace NebulaMigration.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Options;
+    using Microsoft.IdentityModel.Tokens;
+    using NebulaMigration.Models;
+    using NebulaMigration.Options;
+
     /// <summary>
     /// AccountController.
     /// </summary>
@@ -74,9 +74,9 @@ namespace NebulaMigration.Controllers
         [HttpPost("ChangePassword")]
         public async Task<ActionResult> ChangePassword(ResetPasswordViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return this.BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
 
             var user = await this.userManager.FindByIdAsync(model.UserId).ConfigureAwait(false);
