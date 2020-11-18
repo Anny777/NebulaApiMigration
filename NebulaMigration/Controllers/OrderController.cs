@@ -185,8 +185,13 @@
             return Ok();
         }
 
+        /// <summary>
+        /// Gets the export orders.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <returns>Array of orders.</returns>
         [HttpGet("GetExportOrders")]
-        public ActionResult<Order[]> GetExportOrders(string token)
+        public ActionResult<ExportOrder[]> GetExportOrders(string token)
         {
             if (!string.Equals("d3a71c3d-abd2-4833-9686-e5c8818c9054", token, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -196,17 +201,17 @@
             var result = this.db.Customs
              .Where(c => c.IsActive && c.IsExportRequested && c.IsOpened)
              .ToArray()
-             .Select(c => new Order
+             .Select(c => new ExportOrder
              {
                  TableNumber = c.TableNumber.ToString(),
                  OperatorId = c.User.OperatorId,
                  Dishes = c.CookingDishes
                  .Where(d => d.IsActive && d.DishState == DishState.Taken)
                  .GroupBy(d => d.Dish.ExternalId)
-                 .Select(d => new Order.Dish
+                 .Select(d => new ExportDish
                  {
                      GoodId = d.Key,
-                     Quantity = d.Count()
+                     Quantity = d.Count(),
                  }).ToArray()
              })
              .ToArray();
@@ -214,6 +219,12 @@
             return Ok(result);
         }
 
+        /// <summary>
+        /// Sets the exported orders.
+        /// </summary>
+        /// <param name="HandledOrders">The handled orders.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>Action result.</returns>
         [HttpPost("SetExportedOrders")]
         public ActionResult SetExportedOrders(string[] HandledOrders, string token)
         {

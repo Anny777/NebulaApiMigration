@@ -24,27 +24,111 @@
             </summary>
             <returns>Action result.</returns>
         </member>
-        <member name="M:NebulaMigration.Controllers.DishController.Get">
+        <member name="T:NebulaMigration.Controllers.CategoryController">
+            <summary>
+            CategoryController.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CategoryController.#ctor(AutoMapper.IMapper,NebulaMigration.ApplicationContext)">
+            <summary>
+            ctor.
+            </summary>
+            <param name="mapper">Mapper.</param>
+            <param name="db">db.</param>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CategoryController.Get">
             <summary>
             Получение списка блюд
             /// </summary>
             <returns></returns>
         </member>
-        <member name="M:NebulaMigration.Controllers.DishController.SetState(System.Int32,NebulaMigration.Models.Enums.DishState)">
+        <member name="T:NebulaMigration.Controllers.DishController">
+            <summary>
+            Dish controller.
+            </summary>
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
+        </member>
+        <member name="M:NebulaMigration.Controllers.DishController.#ctor(NebulaMigration.ApplicationContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NebulaMigration.Controllers.DishController"/> class.
+            </summary>
+            <param name="db">The database.</param>
+            <exception cref="T:System.ArgumentNullException">db.</exception>
+        </member>
+        <member name="M:NebulaMigration.Controllers.DishController.Get">
+            <summary>
+            Получение списка блюд
+            /// </summary>
+            <returns>List of dish view model.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.DishController.SetState(System.Int32,NebulaMigration.Models.Enums.DishState,System.Threading.CancellationToken)">
             <summary>
             Смена состояния блюда на готовое
             </summary>
-            <param name="id">идентификатор блюда</param>
-            <param name="dishState">статус блюда</param>
-            <returns></returns>
+            <param name="id">The id of dish.</param>
+            <param name="dishState">The state of dish.</param>
+            <param name="ct">The cancellation token.</param>
+            <returns>Order.</returns>
         </member>
-        <member name="M:NebulaMigration.Controllers.DishController.Post(NebulaMigration.ViewModels.DishViewModel,System.Int32)">
+        <member name="M:NebulaMigration.Controllers.DishController.Post(NebulaMigration.ViewModels.DishViewModel,System.Int32,System.Threading.CancellationToken)">
             <summary>
             Добавление блюда
             </summary>
             <param name="dish">объект блюда</param>
             <param name="idOrder">идентификатор заказа</param>
-            <returns></returns>
+            <param name="ct">The cancellation token.</param>
+            <returns>Order view model.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.DishController.Sync(NebulaMigration.Models.SyncModel,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Synchronizes the specified data.
+            </summary>
+            <param name="data">The data.</param>
+            <param name="token">The token.</param>
+            <param name="ct">The cancellation token.</param>
+            <returns>Action result.</returns>
+        </member>
+        <member name="T:NebulaMigration.Models.ExportDish">
+            <summary>
+            Dish for export.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.ExportDish.GoodId">
+            <summary>
+            Gets or sets the good identifier.
+            </summary>
+            <value>
+            The good identifier.
+            </value>
+        </member>
+        <member name="P:NebulaMigration.Models.ExportDish.Quantity">
+            <summary>
+            Gets or sets the quantity.
+            </summary>
+            <value>
+            The quantity.
+            </value>
+        </member>
+        <member name="T:NebulaMigration.Models.SyncModel">
+            <summary>
+            Model for sync.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.SyncModel.Goods">
+            <summary>
+            Gets or sets the goods.
+            </summary>
+            <value>
+            The goods.
+            </value>
+        </member>
+        <member name="P:NebulaMigration.Models.SyncModel.Categories">
+            <summary>
+            Gets or sets the categories.
+            </summary>
+            <value>
+            The categories.
+            </value>
         </member>
         <member name="P:NebulaMigration.Models.ResetPasswordViewModel.UserId">
             <summary>
@@ -97,6 +181,16 @@
             Create host builder.
             </summary>
         </member>
+        <member name="T:NebulaMigration.Services.AutoMapping">
+            <summary>
+            Auto mapping.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Services.AutoMapping.#ctor">
+            <summary>
+            ctor.
+            </summary>
+        </member>
         <member name="T:NebulaMigration.Startup">
             <summary>
             Startup.
@@ -115,6 +209,31 @@
         <member name="M:NebulaMigration.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             Configure.
+            </summary>
+        </member>
+        <member name="T:NebulaMigration.ViewModels.CategoryViewModel">
+            <summary>
+            Category view model.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.CategoryViewModel.Id">
+            <summary>
+            Id.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.CategoryViewModel.Name">
+            <summary>
+            Name 
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.CategoryViewModel.Code">
+            <summary>
+            Code
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.CategoryViewModel.WorkshopType">
+            <summary>
+            Work shop type.
             </summary>
         </member>
         <member name="F:NebulaMigration.ViewModels.DishViewModel.CookingDishId">
@@ -157,6 +276,11 @@
             Цена блюда
             </summary>
         </member>
+        <member name="T:NebulaMigration.ViewModels.OrderViewModel">
+            <summary>
+            Order view model.
+            </summary>
+        </member>
         <member name="F:NebulaMigration.ViewModels.OrderViewModel.Id">
             <summary>
             Идентификатор заказа
@@ -187,38 +311,54 @@
             Флаг экспорта заказа во внешнюю систему
             </summary>
         </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Get">
+        <member name="T:NebulaApi.Controllers.OrderController">
+            <summary>
+            Order controller.
+            </summary>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.#ctor(NebulaMigration.ApplicationContext,AutoMapper.IMapper)">
+            <summary>
+            ctor.
+            </summary>
+            <param name="db">Db.</param>
+            <param name="mapper">Mapper.</param>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.Get(System.Threading.CancellationToken)">
             <summary>
             Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
             </summary>
             <returns></returns>
         </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Get(System.Int32)">
+        <member name="M:NebulaApi.Controllers.OrderController.Get(System.Int32,System.Threading.CancellationToken)">
             <summary>
             Получение заказа по номеру стола
             </summary>
             <param name="table">номер стола</param>
+            <param name="ct">Cancellation token.</param>
             <returns></returns>
         </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Post(NebulaMigration.ViewModels.OrderViewModel)">
+        <member name="M:NebulaApi.Controllers.OrderController.Post(NebulaMigration.ViewModels.OrderViewModel,System.Threading.CancellationToken)">
             <summary>
             Создание нового заказа
             </summary>
             <param name="order">заказ</param>
+            <param name="ct">Cancellation token.</param>
             <returns></returns>
         </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Close(System.Int32)">
+        <member name="M:NebulaApi.Controllers.OrderController.Close(System.Int32,System.Threading.CancellationToken)">
             <summary>
             Закрытие заказа 
             </summary>
             <param name="tableNumber">номер стола</param>
+            <param name="ct">Cancellation token.</param>
             <returns></returns>
         </member>
-        <member name="M:NebulaApi.Controllers.OrderController.AddComment(NebulaMigration.ViewModels.OrderViewModel)">
+        <member name="M:NebulaApi.Controllers.OrderController.AddComment(NebulaMigration.ViewModels.OrderViewModel,System.Threading.CancellationToken)">
             <summary>
             Добавление комментария к заказу
             </summary>
             <param name="order"></param>
+            <param name="ct">Cancellatin token.</param>
             <returns></returns>
         </member>
         <member name="M:NebulaApi.Controllers.OrderController.SetExportOrder(System.Int32)">
@@ -227,6 +367,50 @@
             </summary>
             <param name="tableNumber"></param>
             <returns></returns>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.GetExportOrders(System.String)">
+            <summary>
+            Gets the export orders.
+            </summary>
+            <param name="token">The token.</param>
+            <returns>Array of orders.</returns>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.SetExportedOrders(System.String[],System.String)">
+            <summary>
+            Sets the exported orders.
+            </summary>
+            <param name="HandledOrders">The handled orders.</param>
+            <param name="token">The token.</param>
+            <returns>Action result.</returns>
+        </member>
+        <member name="T:NebulaApi.Models.ExportOrder">
+            <summary>
+            Order for export.
+            </summary>
+        </member>
+        <member name="P:NebulaApi.Models.ExportOrder.TableNumber">
+            <summary>
+            Gets or sets the table number.
+            </summary>
+            <value>
+            The table number.
+            </value>
+        </member>
+        <member name="P:NebulaApi.Models.ExportOrder.OperatorId">
+            <summary>
+            Gets or sets the operator identifier.
+            </summary>
+            <value>
+            The operator identifier.
+            </value>
+        </member>
+        <member name="P:NebulaApi.Models.ExportOrder.Dishes">
+            <summary>
+            Gets or sets the dishes.
+            </summary>
+            <value>
+            The dishes.
+            </value>
         </member>
     </members>
 </doc>
