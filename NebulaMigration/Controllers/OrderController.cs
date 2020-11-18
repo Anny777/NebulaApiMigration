@@ -26,7 +26,7 @@
         /// Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
         /// </summary>
         /// <returns></returns>
-        [HttpGet()]
+        [HttpGet]
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
         public async Task<ActionResult<OrderViewModel[]>> Get()
         {
@@ -39,7 +39,7 @@
         /// </summary>
         /// <param name="table">номер стола</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{table:int}")]
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
         public ActionResult<Custom> Get(int table)
         {

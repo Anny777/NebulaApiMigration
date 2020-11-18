@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace NebulaMigration.Options
+﻿namespace NebulaMigration.Options
 {
     /// <summary>
     /// NebulaApiOptions.

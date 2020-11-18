@@ -1,0 +1,30 @@
+﻿version: '3.4'
+
+services:
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "yourStrong(!)Password"
+      MSSQL_PID: "Express"
+
+  web-api:
+    build:
+      context: ./
+      dockerfile: API.Dockerfile
+    ports:
+      - "50001:80"
+    depends_on:
+      - mssql
+    environment:
+      NEBULAAPIOPTIONS__CONNECTIONSTRING: "Data Source=mssql;user id=sa;password=yourStrong(!)Password;Initial Catalog=Nebula_Integration_Tests"
+
+  integration-tests:
+    build:
+      context: ./
+      dockerfile: Integration-tests.Dockerfile
+    depends_on:
+      - web-api

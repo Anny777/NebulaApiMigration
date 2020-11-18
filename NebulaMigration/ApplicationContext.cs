@@ -21,7 +21,7 @@
             {
                 throw new ArgumentNullException(nameof(options));
             }
-
+            Console.WriteLine($"Connection string: {optionsNebula.Value.ConnectionString}");
             this.connectionString = optionsNebula.Value.ConnectionString;
             if (string.IsNullOrWhiteSpace(this.connectionString))
             {

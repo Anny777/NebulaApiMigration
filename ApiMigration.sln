@@ -10,9 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E934582D-CF37-4EA2-911E-1216EE8412A8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		docker-compose-integration-tests.yml = docker-compose-integration-tests.yml
 		Integration-tests.Dockerfile = Integration-tests.Dockerfile
-		Api.Dockerfile = Api.Dockerfile
+		docker-compose.yml = docker-compose.yml
+		API.Dockerfile = API.Dockerfile
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NebulaMigration.IntegrationTests", "NebulaMigration.IntegrationTests\NebulaMigration.IntegrationTests.csproj", "{90613AFF-4CAF-488A-A6C3-105B963064A2}"

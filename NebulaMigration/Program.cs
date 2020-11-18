@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
 namespace NebulaMigration
 {
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
+
     /// <summary>
     /// Program.
     /// </summary>
@@ -19,8 +20,17 @@ namespace NebulaMigration
         /// <summary>
         /// Create host builder.
         /// </summary>
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host
+                    .CreateDefaultBuilder(args)
+                    .ConfigureAppConfiguration(ConfigureAppConfiguration)
+                    .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+        }
+
+        private static void ConfigureAppConfiguration(HostBuilderContext hostBulderContext, IConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.AddJsonFile("./configs.json", true);
+        }
     }
 }
