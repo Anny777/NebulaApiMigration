@@ -3,20 +3,26 @@ using System.Collections.Generic;
 
 namespace NebulaMigration.ViewModels
 {
+    /// <summary>
+    /// Order view model.
+    /// </summary>
     public class OrderViewModel
     {
         /// <summary>
         /// Идентификатор заказа
         /// </summary>
         public Guid Id;
+
         /// <summary>
         /// Коллекция блюд
         /// </summary>
         public IEnumerable<DishViewModel> Dishes;
+
         /// <summary>
         /// Номер стола
         /// </summary>
         public int Table;
+        
         /// <summary>
         /// Дата создания
         /// </summary>

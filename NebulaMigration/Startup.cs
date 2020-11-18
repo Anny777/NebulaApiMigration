@@ -1,3 +1,4 @@
+using AutoMapper;
 using System;
 using System.IO;
 using System.Reflection;
@@ -36,6 +37,7 @@ namespace NebulaMigration
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup));
             services.ConfigureEagerly<NebulaApiOptions>(this.configuration);
             services.ConfigureEagerly<NebulaAuthorizationOptions>(this.configuration);
             services.AddScoped<ApplicationContext>();
@@ -59,12 +61,14 @@ namespace NebulaMigration
 
             services.AddMvc(config =>
             {
+                config.EnableEndpointRouting = false;
+#if !DEBUG
                 var policy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
                       .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                       .RequireAuthenticatedUser()
                       .Build();
-                config.EnableEndpointRouting = false;
                 config.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
+#endif
             })
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
@@ -103,7 +107,7 @@ namespace NebulaMigration
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseMvc();
         }
     }

@@ -1,112 +1,156 @@
-﻿
-
-namespace NebulaApi.Controllers
+﻿namespace NebulaApi.Controllers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+    using Microsoft.EntityFrameworkCore;
+    using NebulaApi.Models;
     using NebulaMigration;
     using NebulaMigration.Models;
     using NebulaMigration.Models.Enums;
     using NebulaMigration.ViewModels;
 
+    /// <summary>
+    /// Order controller.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderController : ControllerBase
+    public partial class OrderController : ControllerBase
     {
         private readonly ApplicationContext db;
+        private readonly IMapper mapper;
 
-        public OrderController(ApplicationContext db)
+        /// <summary>
+        /// ctor.
+        /// </summary>
+        /// <param name="db">Db.</param>
+        /// <param name="mapper">Mapper.</param>
+        public OrderController(ApplicationContext db, IMapper mapper)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.db = db ?? throw new ArgumentNullException(nameof(db));
-        }
-
-        /// <summary>
-        /// Получение заказа по номеру стола
-        /// </summary>
-        /// <param name="table">номер стола</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
-        public ActionResult<Custom> Get(int table)
-        {
-            var order = this.db.Customs.FirstOrDefault(o => o.IsActive && o.IsOpened && o.TableNumber == table);
-            if (order == null)
-            {
-                return NotFound("Заказ не найден");
-            }
-
-            return Ok(order.ToViewModel());
-        }
-
-        /// <summary>
-        /// Создание нового заказа
-        /// </summary>
-        /// <param name="order">заказ</param>
-        /// <returns></returns>
-        [HttpPost]
-        [Authorize(Roles = "Waiter, Admin")]
-        public ActionResult<OrderViewModel> Post(OrderViewModel order)
-        {
-            if (order == null || order.Dishes == null)
-            {
-                return this.BadRequest("Не получены необходимые данные");
-            }
-
-            this.db.Customs.Add(new Custom(true, true, order.Table, order.Comment));
-            db.SaveChanges();
-            return Ok();
         }
 
         /// <summary>
         /// Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetOpenedOrders")]
+        [HttpGet]
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
-        public ActionResult<OrderViewModel[]> GetOpenedOrder()
+        public async Task<ActionResult<IEnumerable<OrderViewModel>>> Get(CancellationToken ct)
         {
-            var orders = this.db.Customs.Where(c => c.IsOpened).ToList().Select(c => c.ToViewModel());
-            return Ok(orders);
+            var orders = await this.db
+                .Customs
+                .Include(i => i.CookingDishes)
+                .Where(c => c.IsOpened)
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
+
+            return this.Ok(orders.Select(this.mapper.Map<OrderViewModel>));
+        }
+
+        /// <summary>
+        /// Получение заказа по номеру стола
+        /// </summary>
+        /// <param name="table">номер стола</param>
+        /// <param name="ct">Cancellation token.</param>
+        /// <returns></returns>
+        [HttpGet("{table:int}")]
+        [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
+        public async Task<ActionResult<Custom>> Get(int table, CancellationToken ct)
+        {
+            var order = await this.db.Customs
+                .FirstOrDefaultAsync(o => o.IsActive && o.IsOpened && o.TableNumber == table, ct)
+                .ConfigureAwait(false);
+            if (order == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.Ok(this.mapper.Map<OrderViewModel>(order));
+        }
+
+        /// <summary>
+        /// Создание нового заказа
+        /// </summary>
+        /// <param name="order">заказ</param>
+        /// <param name="ct">Cancellation token.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize(Roles = "Waiter, Admin")]
+        public async Task<ActionResult<OrderViewModel>> Post(OrderViewModel order, CancellationToken ct)
+        {
+            if (order == null || order.Dishes == null)
+            {
+                return this.BadRequest("Не получены необходимые данные");
+            }
+
+            var custom = new Custom
+            {
+                IsActive = true,
+                CreatedDate = DateTime.UtcNow,
+                CookingDishes = order.Dishes.Select(this.mapper.Map<CookingDish>),
+                IsOpened = true,
+                TableNumber = order.Table,
+                Comment = order.Comment,
+            };
+
+            this.db.Customs.Add(custom);
+            var saveResult = await db.SaveChangesAsync(ct).ConfigureAwait(false);
+            return Ok();
         }
 
         /// <summary>
         /// Закрытие заказа 
         /// </summary>
         /// <param name="tableNumber">номер стола</param>
+        /// <param name="ct">Cancellation token.</param>
         /// <returns></returns>
         [HttpPatch]
         [Authorize(Roles = "Bartender, Admin")]
-        public ActionResult Close(int tableNumber)
+        public async Task<ActionResult> Close(int tableNumber, CancellationToken ct)
         {
-            this.db.Customs
+            var customs = await this.db.Customs
                 .Where(c => c.TableNumber == tableNumber && c.IsOpened && c.IsActive)
-                .ToList()
-                .ForEach(c => c.CloseOrder());
-            this.db.SaveChanges();
-            return Ok();
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
+
+            customs.ForEach(CloseOrder);
+            var saveResult = await this.db.SaveChangesAsync(ct).ConfigureAwait(false);
+            if (saveResult > 0)
+            {
+                return this.Ok();
+            }
+
+            return this.NotFound();
         }
 
         /// <summary>
         /// Добавление комментария к заказу
         /// </summary>
         /// <param name="order"></param>
+        /// <param name="ct">Cancellatin token.</param>
         /// <returns></returns>
         [HttpPatch("AddComment")]
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
-        public ActionResult AddComment(OrderViewModel order)
+        public async Task<ActionResult> AddComment(OrderViewModel order, CancellationToken ct)
         {
             try
             {
-                var o = this.db.Customs.Find(order.Id);
+                var o = await this.db.Customs.FindAsync(order.Id, ct).ConfigureAwait(false);
                 if (o != null)
                 {
-                    o.SetComment(order.Comment);
-                    db.SaveChanges();
-                    return Ok();
+                    o.Comment += order.Comment;
+                    var saveResult = await db.SaveChangesAsync(ct).ConfigureAwait(false);
+                    if (saveResult > 0)
+                    {
+                        return this.Ok();
+                    }
                 }
 
                 return this.NotFound("Заказ не найден.");
@@ -144,7 +188,7 @@ namespace NebulaApi.Controllers
         [HttpGet("GetExportOrders")]
         public ActionResult<Order[]> GetExportOrders(string token)
         {
-            if (!string.Equals("d3a71c3d-abd2-4833-9686-e5c8818c9054", token, System.StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals("d3a71c3d-abd2-4833-9686-e5c8818c9054", token, StringComparison.InvariantCultureIgnoreCase))
             {
                 return BadRequest("Доступ запрещен");
             }
@@ -159,7 +203,7 @@ namespace NebulaApi.Controllers
                  Dishes = c.CookingDishes
                  .Where(d => d.IsActive && d.DishState == DishState.Taken)
                  .GroupBy(d => d.Dish.ExternalId)
-                 .Select(d => new Order.dish
+                 .Select(d => new Order.Dish
                  {
                      GoodId = d.Key,
                      Quantity = d.Count()
@@ -168,18 +212,6 @@ namespace NebulaApi.Controllers
              .ToArray();
 
             return Ok(result);
-        }
-
-        public class Order
-        {
-            public string TableNumber { get; set; }
-            public int OperatorId { get; set; }
-            public dish[] Dishes { get; set; }
-            public class dish
-            {
-                public int GoodId { get; set; }
-                public int Quantity { get; set; }
-            }
         }
 
         [HttpPost("SetExportedOrders")]
@@ -192,10 +224,17 @@ namespace NebulaApi.Controllers
             this.db.Customs
                 .Where(c => c.IsExportRequested && HandledOrders.Contains(c.TableNumber.ToString()))
                 .ToList()
-                .ForEach(c => c.SetStatusExportRequested(false));
+                .ForEach(c => c.IsExportRequested = false);
             this.db.SaveChanges();
 
             return Ok();
+        }
+
+        private void CloseOrder(Custom custom)
+        {
+            custom.IsOpened = false;
+            custom.CookingDishes.ToList().ForEach(cd => cd.IsActive = false);
+            custom.IsActive = false;
         }
     }
 }

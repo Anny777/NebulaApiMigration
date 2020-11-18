@@ -13,6 +13,11 @@
         <member name="M:NebulaMigration.ApplicationContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
             <inheritdoc/>
         </member>
+        <member name="T:NebulaMigration.Controllers.AccountController">
+            <summary>
+            AccountController.
+            </summary>
+        </member>
         <member name="M:NebulaMigration.Controllers.AccountController.GetUserInfo">
             <summary>
             Gets the user information.
@@ -182,6 +187,12 @@
             Флаг экспорта заказа во внешнюю систему
             </summary>
         </member>
+        <member name="M:NebulaApi.Controllers.OrderController.Get">
+            <summary>
+            Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:NebulaApi.Controllers.OrderController.Get(System.Int32)">
             <summary>
             Получение заказа по номеру стола
@@ -194,12 +205,6 @@
             Создание нового заказа
             </summary>
             <param name="order">заказ</param>
-            <returns></returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.GetOpenedOrder">
-            <summary>
-            Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
-            </summary>
             <returns></returns>
         </member>
         <member name="M:NebulaApi.Controllers.OrderController.Close(System.Int32)">

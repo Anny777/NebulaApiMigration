@@ -4,10 +4,10 @@
     {
         public AuthenticateResponse(User user, string token)
         {
-            Id = user.Id;
-            Username = user.UserName;
-            Access_token = token;
-            Token_type = "Bearer";
+            this.Id = user.Id;
+            this.Username = user.UserName;
+            this.Access_token = token;
+            this.Token_type = "Bearer";
         }
 
         public string Id { get; set; }

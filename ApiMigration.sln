@@ -7,6 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NebulaMigration", "NebulaMi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Configuration", "Infrastructure\Infrastructure.Configuration\Infrastructure.Configuration.csproj", "{3989BBF1-373B-4D35-B279-0CCDF2923D3E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E934582D-CF37-4EA2-911E-1216EE8412A8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Integration-tests.Dockerfile = Integration-tests.Dockerfile
+		docker-compose.yml = docker-compose.yml
+		API.Dockerfile = API.Dockerfile
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NebulaMigration.IntegrationTests", "NebulaMigration.IntegrationTests\NebulaMigration.IntegrationTests.csproj", "{90613AFF-4CAF-488A-A6C3-105B963064A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +31,10 @@ Global
 		{3989BBF1-373B-4D35-B279-0CCDF2923D3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3989BBF1-373B-4D35-B279-0CCDF2923D3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3989BBF1-373B-4D35-B279-0CCDF2923D3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90613AFF-4CAF-488A-A6C3-105B963064A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90613AFF-4CAF-488A-A6C3-105B963064A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90613AFF-4CAF-488A-A6C3-105B963064A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90613AFF-4CAF-488A-A6C3-105B963064A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
