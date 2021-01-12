@@ -9,33 +9,51 @@ namespace NebulaMigration.ViewModels
     public class OrderViewModel
     {
         /// <summary>
-        /// Идентификатор заказа
+         /// Gets or sets the identifier.
         /// </summary>
-        public Guid Id;
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Коллекция блюд
+        /// Gets or sets the dishes.
         /// </summary>
-        public IEnumerable<DishViewModel> Dishes;
+        /// <value>
+        /// The dishes.
+        /// </value>
+        public IEnumerable<DishViewModel> Dishes { get; set; }
 
         /// <summary>
-        /// Номер стола
+        /// Gets or sets the table.
         /// </summary>
-        public int Table;
-        
+        /// <value>
+        /// The table.
+        /// </value>
+        public int Table { get; set; }
+
         /// <summary>
-        /// Дата создания
+        /// Gets or sets the created date.
         /// </summary>
+        /// <value>
+        /// The created date.
+        /// </value>
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
-        /// Комментарий к заказу
+        /// Gets or sets the comment.
         /// </summary>
+        /// <value>
+        /// The comment.
+        /// </value>
         public string Comment { get; set; }
 
         /// <summary>
-        /// Флаг экспорта заказа во внешнюю систему
+        /// Gets or sets a value indicating whether this instance is export requested.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is export requested; otherwise, <c>false</c>.
+        /// </value>
         public bool IsExportRequested { get; set; }
     }
 }

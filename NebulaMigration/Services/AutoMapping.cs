@@ -17,7 +17,8 @@ namespace NebulaMigration.Services
             CreateMap<Category, CategoryViewModel>();
             CreateMap<Custom, OrderViewModel>();
             CreateMap<Dish, DishViewModel>();
-            CreateMap<DishViewModel, CookingDish>();
+            CreateMap<DishViewModel, Dish>();
+            CreateMap<Dish, CookingDish>().ForMember(c => c.Dish, a => a.MapFrom((q, w) => q));
         }
     }
 }

@@ -45,9 +45,14 @@
             }
 
             var user = await this.userManager.FindByEmailAsync(model.Username).ConfigureAwait(false);
-            if (user == null || !await this.userManager.CheckPasswordAsync(user, model.Password).ConfigureAwait(false))
+            if (user == null)
             {
-                return this.BadRequest("Пользователь не найден или ошибка при вводе пароля.");
+                return this.BadRequest("Пользователь не найден");
+            }
+
+            if (!await this.userManager.CheckPasswordAsync(user, model.Password).ConfigureAwait(false))
+            {
+                return this.BadRequest("Oшибка при вводе пароля.");
             }
 
             var encoded = await this.GetToken(user).ConfigureAwait(false);
@@ -81,17 +86,22 @@
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("GetUserInfo")]
-        public async Task<ActionResult> GetUserInfo()
+        public async Task<ActionResult> GetUserInfo(string userName)
         {
-            var user = await this.userManager.FindByEmailAsync(User.Identity.Name).ConfigureAwait(false);
-            if (user == null) 
+            if (string.IsNullOrWhiteSpace(userName))
             {
-                return this.BadRequest();
+                return this.BadRequest("Имя пользователя не может быть пустым.");
+            }
+
+            var user = await this.userManager.FindByEmailAsync(userName).ConfigureAwait(false);
+            if (user == null)
+            {
+                return this.BadRequest("Пользователь не найден.");
             }
             var roles = await this.userManager.GetRolesAsync(user).ConfigureAwait(false);
             var userInfo = new UserInfoViewModel
             {
-                Email = User.Identity.Name,
+                Email = userName,
                 Roles = roles,
                 HasRegistered = true,
             };
