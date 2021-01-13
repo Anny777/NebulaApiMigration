@@ -76,13 +76,13 @@
         }
 
         /// <summary>
-        /// Создание нового заказа
+        /// Posts the specified order.
         /// </summary>
-        /// <param name="order">заказ</param>
-        /// <param name="ct">Cancellation token.</param>
-        /// <returns></returns>
+        /// <param name="order">The order.</param>
+        /// <param name="ct">The ct.</param>
+        /// <returns>Order view model.</returns>
         [HttpPost]
-        [Authorize(Roles = "Waiter, Admin")]
+        //[Authorize(Roles = "Waiter, Admin")]
         public async Task<ActionResult<OrderViewModel>> Post(OrderViewModel order, CancellationToken ct)
         {
             if (order == null || order.Dishes == null)
@@ -90,11 +90,13 @@
                 return this.BadRequest("Не получены необходимые данные");
             }
 
+            var dishesId = order.Dishes.Select(c => c.Id).ToArray();
+            var dishes = this.db.Dishes.Where(a => dishesId.Contains(a.Id));
             var custom = new Custom
             {
                 IsActive = true,
                 CreatedDate = DateTime.UtcNow,
-                CookingDishes = order.Dishes.Select(this.mapper.Map<CookingDish>),
+                CookingDishes = dishes.Select(this.mapper.Map<CookingDish>).ToArray(),
                 IsOpened = true,
                 TableNumber = order.Table,
                 Comment = order.Comment,
