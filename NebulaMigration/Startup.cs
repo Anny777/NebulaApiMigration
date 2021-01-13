@@ -53,15 +53,17 @@ namespace NebulaMigration
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "nebula",
                         ValidAudience = "nebula",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration.GetSection("NebulaApiOptions:SecurityKey").Value)),
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(this.configuration.GetSection("NebulaApiOptions:SecurityKey")
+                                .Value)),
                     };
                 });
 
             services.AddCors();
 
             services.AddMvc(config =>
-            {
-                config.EnableEndpointRouting = false;
+                {
+                    config.EnableEndpointRouting = false;
 #if !DEBUG
                 var policy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
                       .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
@@ -69,7 +71,7 @@ namespace NebulaMigration
                       .Build();
                 config.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
 #endif
-            })
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddIdentity<User, IdentityRole>()
@@ -98,10 +100,7 @@ namespace NebulaMigration
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nebula API v1");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nebula API v1"); });
 
             app.UseCors(builder =>
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

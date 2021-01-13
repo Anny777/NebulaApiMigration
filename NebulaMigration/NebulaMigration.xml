@@ -10,8 +10,16 @@
             </summary>
             <param name="options">The options.</param>
         </member>
+        <member name="P:NebulaMigration.ApplicationContext.Customs">
+            <summary>
+            Customs.
+            </summary>
+        </member>
         <member name="M:NebulaMigration.ApplicationContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
             <inheritdoc/>
+        </member>
+        <member name="M:NebulaMigration.ApplicationContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
         </member>
         <member name="T:NebulaMigration.Controllers.AccountController">
             <summary>

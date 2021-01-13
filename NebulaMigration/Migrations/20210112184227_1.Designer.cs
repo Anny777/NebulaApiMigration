@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NebulaMigration;
 
 namespace NebulaMigration.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210112184227_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,15 +46,6 @@ namespace NebulaMigration.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c3126bd5-811c-4113-984f-eea064363382",
-                            ConcurrencyStamp = "06de05a0-4014-4fb8-ae6e-68bedd3ea953",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -138,13 +131,6 @@ namespace NebulaMigration.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "55b3ea7d-14bd-46f0-947d-534e22a0af13",
-                            RoleId = "c3126bd5-811c-4113-984f-eea064363382"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -388,26 +374,6 @@ namespace NebulaMigration.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "55b3ea7d-14bd-46f0-947d-534e22a0af13",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "eceee2fb-7790-46bd-adb5-ad86fb6e0979",
-                            Email = "admin@nebula.com",
-                            EmailConfirmed = true,
-                            Expires_in = 0,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@NEBULA.COM",
-                            NormalizedUserName = "admin@nebula.com",
-                            OperatorId = 1,
-                            PasswordHash = "AQAAAAEAACcQAAAAEF3jNG2nKXcx6MqnB0yVOL1iGBFWrZE9N1TKq6jhMmDzjHH8QB8/84qPtnmOfrlyTw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@nebula.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -35,7 +35,7 @@ namespace NebulaMigration.Controllers
         /// <returns></returns>
         [HttpGet]
 #if !DEBUG
-        [Authorize(Roles = "Admin")]
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin")]
 #endif
         public async Task<ActionResult<IEnumerable<CategoryViewModel>>> Get()
         {
