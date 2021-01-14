@@ -16,11 +16,12 @@ services:
       context: ./
       dockerfile: API.Dockerfile
     ports:
-      - "50001:80"
+      - "5001:80"
     depends_on:
       - mssql
     environment:
       NEBULAAPIOPTIONS__CONNECTIONSTRING: "Data Source=mssql;user id=sa;password=yourStrong(!)Password;Initial Catalog=Nebula_Integration_Tests"
+      NEBULAAUTHORIZATIONOPTIONS__SYMMETRICSECURITYKEY: "SuperSecurityKey1234567890"
 
   integration-tests:
     build:
