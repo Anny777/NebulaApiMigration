@@ -8,7 +8,7 @@
         public Guid Id { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
-        public IEnumerable<CookingDish> CookingDishes { get; set; }
+        public ICollection<CookingDish> CookingDishes { get; set; }
         public bool IsOpened { get; set; }
         public User User { get; set; }
         public bool IsExportRequested { get; set; }

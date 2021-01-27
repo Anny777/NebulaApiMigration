@@ -1,32 +1,17 @@
-﻿namespace NebulaMigration.Models
+namespace NebulaMigration.Commands
 {
-    using System;
-    using NebulaMigration.Models.Enums;
+    using Models.Enums;
 
     /// <summary>
-    /// Category.
+    /// Команда на создание категории.
     /// </summary>
-    public class Category
+    public class CreateCategoryCommand
     {
-        /// <summary>
-        /// Id.
-        /// </summary>
-        public Guid Id { get; set; }
         
         /// <summary>
         /// ExternalId.
         /// </summary>
         public int ExternalId { get; set; }
-        
-        /// <summary>
-        /// IsActive.
-        /// </summary>
-        public bool IsActive { get; set; }
-        
-        /// <summary>
-        /// Created date.
-        /// </summary>
-        public DateTime CreatedDate { get; set; }
         
         /// <summary>
         /// Name.

@@ -21,6 +21,71 @@
         <member name="M:NebulaMigration.ApplicationContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:NebulaMigration.Commands.CreateCategoryCommand">
+            <summary>
+            Команда на создание категории.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateCategoryCommand.ExternalId">
+            <summary>
+            ExternalId.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateCategoryCommand.Name">
+            <summary>
+            Name.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateCategoryCommand.Code">
+            <summary>
+            Code.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateCategoryCommand.WorkshopType">
+            <summary>
+            Workshop type.
+            </summary>
+        </member>
+        <member name="T:NebulaMigration.Commands.CreateDishCommand">
+            <summary>
+            Команда на создание блюда.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateDishCommand.ExternalId">
+            <summary>
+            Внешний идентификатор.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateDishCommand.CategoryId">
+            <summary>
+            Идентификатор категории.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateDishCommand.Consist">
+            <summary>
+            Состав.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateDishCommand.Unit">
+            <summary>
+            Единица измерения.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateDishCommand.IsAvailable">
+            <summary>
+            Есть ли в наличии.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateDishCommand.Name">
+            <summary>
+            Название.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Commands.CreateDishCommand.Price">
+            <summary>
+            Цена.
+            </summary>
+        </member>
         <member name="T:NebulaMigration.Controllers.AccountController">
             <summary>
             AccountController.
@@ -46,9 +111,15 @@
         </member>
         <member name="M:NebulaMigration.Controllers.CategoryController.Get">
             <summary>
-            Получение списка блюд
+            Получение списка категорий.
             /// </summary>
-            <returns></returns>
+            <returns>Список категорий блюд.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CategoryController.Post(NebulaMigration.Commands.CreateCategoryCommand)">
+            <summary>
+            Добавляет новую категорию.
+            /// </summary>
+            <returns>Результат выполнения операции.</returns>
         </member>
         <member name="T:NebulaMigration.Controllers.DishController">
             <summary>
@@ -56,11 +127,12 @@
             </summary>
             <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
         </member>
-        <member name="M:NebulaMigration.Controllers.DishController.#ctor(NebulaMigration.ApplicationContext)">
+        <member name="M:NebulaMigration.Controllers.DishController.#ctor(NebulaMigration.ApplicationContext,AutoMapper.IMapper)">
             <summary>
             Initializes a new instance of the <see cref="T:NebulaMigration.Controllers.DishController"/> class.
             </summary>
             <param name="db">The database.</param>
+            <param name="mapper">The mapper.</param>
             <exception cref="T:System.ArgumentNullException">db.</exception>
         </member>
         <member name="M:NebulaMigration.Controllers.DishController.Get">
@@ -68,6 +140,12 @@
             Получение списка блюд
             /// </summary>
             <returns>List of dish view model.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.DishController.Post(NebulaMigration.Commands.CreateDishCommand,System.Threading.CancellationToken)">
+            <summary>
+            Добавляет новое блюдо в систему.
+            </summary>
+            <returns>Ответ.</returns>
         </member>
         <member name="M:NebulaMigration.Controllers.DishController.SetState(System.Int32,NebulaMigration.Models.Enums.DishState,System.Threading.CancellationToken)">
             <summary>
@@ -78,15 +156,6 @@
             <param name="ct">The cancellation token.</param>
             <returns>Order.</returns>
         </member>
-        <member name="M:NebulaMigration.Controllers.DishController.Post(NebulaMigration.ViewModels.DishViewModel,System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            Добавление блюда
-            </summary>
-            <param name="dish">объект блюда</param>
-            <param name="idOrder">идентификатор заказа</param>
-            <param name="ct">The cancellation token.</param>
-            <returns>Order view model.</returns>
-        </member>
         <member name="M:NebulaMigration.Controllers.DishController.Sync(NebulaMigration.Models.SyncModel,System.String,System.Threading.CancellationToken)">
             <summary>
             Synchronizes the specified data.
@@ -95,6 +164,46 @@
             <param name="token">The token.</param>
             <param name="ct">The cancellation token.</param>
             <returns>Action result.</returns>
+        </member>
+        <member name="T:NebulaMigration.Models.Category">
+            <summary>
+            Category.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.Category.Id">
+            <summary>
+            Id.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.Category.ExternalId">
+            <summary>
+            ExternalId.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.Category.IsActive">
+            <summary>
+            IsActive.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.Category.CreatedDate">
+            <summary>
+            Created date.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.Category.Name">
+            <summary>
+            Name.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.Category.Code">
+            <summary>
+            Code.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.Category.WorkshopType">
+            <summary>
+            Workshop type.
+            </summary>
         </member>
         <member name="T:NebulaMigration.Models.ExportDish">
             <summary>
@@ -369,6 +478,15 @@
             </summary>
             <param name="order">The order.</param>
             <param name="ct">The ct.</param>
+            <returns>Order view model.</returns>
+        </member>
+        <member name="M:NebulaApi.Controllers.OrderController.Post(NebulaMigration.ViewModels.DishViewModel,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Добавление блюда к заказу
+            </summary>
+            <param name="dish">объект блюда</param>
+            <param name="idOrder">идентификатор заказа</param>
+            <param name="ct">The cancellation token.</param>
             <returns>Order view model.</returns>
         </member>
         <member name="M:NebulaApi.Controllers.OrderController.Close(System.Int32,System.Threading.CancellationToken)">

@@ -4,6 +4,9 @@ using NebulaMigration.ViewModels;
 
 namespace NebulaMigration.Services
 {
+    using System;
+    using Commands;
+
     /// <summary>
     /// Auto mapping.
     /// </summary>
@@ -14,6 +17,15 @@ namespace NebulaMigration.Services
         /// </summary>
         public AutoMapping()
         {
+            CreateMap<CreateCategoryCommand, Category>()
+                .ForMember(c => c.CreatedDate, e => e.MapFrom(c => DateTime.Now))
+                .ForMember(c => c.IsActive, e => e.MapFrom(c => true));
+            
+            CreateMap<CreateDishCommand, Dish>()
+                .ForMember(c => c.CreatedDate, e => e.MapFrom(c => DateTime.Now))
+                .ForMember(c => c.IsActive, e => e.MapFrom(c => true));
+                
+            
             CreateMap<Category, CategoryViewModel>();
             CreateMap<Custom, OrderViewModel>();
             CreateMap<Dish, DishViewModel>();

@@ -108,6 +108,50 @@
         }
 
         /// <summary>
+        /// Добавление блюда к заказу
+        /// </summary>
+        /// <param name="dish">объект блюда</param>
+        /// <param name="idOrder">идентификатор заказа</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>Order view model.</returns>
+        [HttpPost("AddDishToOrder")]
+        [Authorize(Roles = "Admin, Bartender, Waiter")]
+        public async Task<ActionResult<OrderViewModel>> Post(DishViewModel dish, int idOrder, CancellationToken ct)
+        {
+            try
+            {
+                var order = await db.Customs.FindAsync(idOrder).ConfigureAwait(false);
+                if (order == null)
+                {
+                    return this.NotFound("Заказ не найден.");
+                }
+
+                var currentDish = await db.Dishes.FindAsync(dish.Id).ConfigureAwait(false);
+                if (currentDish == null)
+                {
+                    return this.NotFound("Блюдо не найдено.");
+                }
+
+                var newDish = new CookingDish
+                {
+                    IsActive = true,
+                    Dish = currentDish,
+                    DishState = DishState.InWork,
+                    Comment = dish.Comment,
+                };
+                order.CookingDishes.Add(newDish);
+                var result = await db.SaveChangesAsync(ct).ConfigureAwait(false);
+                return result > 0
+                    ? Ok(this.mapper.Map<OrderViewModel>(order))
+                    : throw new InvalidOperationException("Не удалось добавить блюдо к заказу");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Закрытие заказа 
         /// </summary>
         /// <param name="tableNumber">номер стола</param>

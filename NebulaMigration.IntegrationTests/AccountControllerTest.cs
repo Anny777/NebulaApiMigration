@@ -1,14 +1,13 @@
 namespace NebulaMigration.IntegrationTests
 {
     using System;
-    using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Text.Json;
     using System.Threading.Tasks;
+    using Models;
     using Polly;
     using Xunit;
-    using Xunit.Sdk;
 
     public class AccountControllerTest
     {
@@ -17,15 +16,25 @@ namespace NebulaMigration.IntegrationTests
         [Fact]
         public async Task AuthenticateShouldReturnOkStatusCodeAndToken()
         {
+            var r = await this.Authenticate();
+            Assert.NotEmpty(r.Access_token);
+            Assert.NotEmpty(r.Token_type);
+            Assert.NotEmpty(r.Username);
+        }
+
+        internal async Task<AuthenticateResponse> Authenticate()
+        {
             var requestDto = new { Username = "admin@nebula.com", Password = "Zxcvbnm,./1" };
             var content =
                 new StringContent(JsonSerializer.Serialize(requestDto), Encoding.UTF8, "application/json");
             using var response = await Policy
                 .Handle<HttpRequestException>()
                 .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(2 * retryAttempt))
-                .ExecuteAsync(() => httpClient.PostAsync("http://web-api/api/Account", content))
+                .ExecuteAsync(() => this.httpClient.PostAsync($"{Environments.Host}/api/Account", content))
                 .ConfigureAwait(false);
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var r = JsonSerializer.Deserialize<AuthenticateResponse>(body);
+            return r;
         }
     }
 }

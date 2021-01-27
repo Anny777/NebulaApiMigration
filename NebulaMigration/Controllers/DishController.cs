@@ -12,6 +12,10 @@ using System.Threading.Tasks;
 
 namespace NebulaMigration.Controllers
 {
+    using Commands;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+
     /// <summary>
     /// Dish controller.
     /// </summary>
@@ -27,28 +31,69 @@ namespace NebulaMigration.Controllers
         /// Initializes a new instance of the <see cref="DishController"/> class.
         /// </summary>
         /// <param name="db">The database.</param>
+        /// <param name="mapper">The mapper.</param>
         /// <exception cref="ArgumentNullException">db.</exception>
-        public DishController(ApplicationContext db)
+        public DishController(ApplicationContext db, IMapper mapper)
         {
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
-
-        //public void SetToken(string token)
-        //{
-        //    Formula360Connection.SetToken(token);
-        //}
 
         /// <summary>
         /// Получение списка блюд
         /// /// </summary>
         /// <returns>List of dish view model.</returns>
         [HttpGet]
-        [AllowAnonymous]
+#if !DEBUG
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
-        public ActionResult<List<DishViewModel>> Get()
+#endif
+        public ActionResult<IEnumerable<DishViewModel>> Get()
         {
-            return this.db.Dishes.Select(this.mapper.Map<DishViewModel>).OrderBy(b => b.Name).ToList();
+            return this.Ok(this.db
+                .Dishes
+                .OrderBy(b => b.Name)
+                .ToArray()
+                .Select(this.mapper.Map<DishViewModel>));
+        }
+
+        /// <summary>
+        /// Добавляет новое блюдо в систему.
+        /// </summary>
+        /// <returns>Ответ.</returns>
+        [HttpPost]
+#if !DEBUG
+        [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
+#endif
+        public async Task<ActionResult> Post(CreateDishCommand dish, CancellationToken cancellationToken)
+        {
+            var currentDish = await this.db
+                .Dishes
+                .FirstOrDefaultAsync(d => d.Name == dish.Name && d.Category.Id == dish.CategoryId, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (currentDish != null)
+            {
+                return this.Conflict("Такое блюдо в данной категории уже существует!");
+            }
+            
+            var currentCategory = await this.db
+                .Categories
+                .FindAsync(dish.CategoryId)
+                .ConfigureAwait(false);
+
+            if (currentCategory == null)
+            {
+                return this.BadRequest("Категория не найдена!");
+            }
+
+            var mappedDish = this.mapper.Map<Dish>(dish);
+            mappedDish.Category = currentCategory;
+            var addedDish = await this.db.AddAsync(mappedDish, cancellationToken)
+                .ConfigureAwait(false);
+            var result = await this.db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            return result > 0
+                ? CreatedAtAction(nameof(this.Get), new { id = addedDish.Entity.Id }, new { id = addedDish.Entity.Id })
+                : throw new InvalidOperationException("Не удалось добавить блюдо!");
         }
 
         /// <summary>
@@ -59,58 +104,22 @@ namespace NebulaMigration.Controllers
         /// <param name="ct">The cancellation token.</param>
         /// <returns>Order.</returns>
         [HttpPost("SetState")]
+#if !DEBUG
         [Authorize(Roles = "Admin, Bartender, Cook, Waiter")]
+#endif
         public async Task<ActionResult<OrderViewModel>> SetState(int id, DishState dishState, CancellationToken ct)
         {
-            try
+            var dish = await this.db.CookingDishes.FindAsync(id).ConfigureAwait(false);
+            if (dish == null)
             {
-                var dish = this.db.CookingDishes.Find(id);
-                if (dish == null)
-                {
-                    return this.NotFound("Блюдо не найдено!");
-                }
+                return this.NotFound("Блюдо не найдено!");
+            }
 
-                dish.DishState = dishState;
-                await db.SaveChangesAsync(ct).ConfigureAwait(false);
-                return Ok(this.mapper.Map<OrderViewModel>(dish));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Добавление блюда
-        /// </summary>
-        /// <param name="dish">объект блюда</param>
-        /// <param name="idOrder">идентификатор заказа</param>
-        /// <param name="ct">The cancellation token.</param>
-        /// <returns>Order view model.</returns>
-        [HttpPost]
-        [Authorize(Roles = "Admin, Bartender, Waiter")]
-        public async Task<ActionResult<OrderViewModel>> Post(DishViewModel dish, int idOrder, CancellationToken ct)
-        {
-            try
-            {
-                var custom = db.Customs.Find(idOrder);
-                var currentDish = db.Dishes.Find(dish.Id);
-
-                var newDish = new CookingDish
-                {
-                    IsActive = true,
-                    Dish = currentDish,
-                    DishState = DishState.InWork,
-                    Comment = dish.Comment,
-                };
-                custom.CookingDishes.ToList().Add(newDish);
-                await db.SaveChangesAsync(ct).ConfigureAwait(false);
-                return Ok(this.mapper.Map<OrderViewModel>(custom));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            dish.DishState = dishState;
+            var result = await db.SaveChangesAsync(ct).ConfigureAwait(false);
+            return result > 0
+                ? Ok(this.mapper.Map<OrderViewModel>(dish))
+                : throw new InvalidOperationException("Не удалось изменить состояние блюда!");
         }
 
         /// <summary>
@@ -123,7 +132,8 @@ namespace NebulaMigration.Controllers
         [HttpPost("Sync")]
         public async Task<ActionResult> Sync(SyncModel data, string token, CancellationToken ct)
         {
-            if (!string.Equals("d3a71c3d-abd2-4833-9686-e5c8818c9054", token, StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals("d3a71c3d-abd2-4833-9686-e5c8818c9054", token,
+                StringComparison.InvariantCultureIgnoreCase))
                 return BadRequest("Доступ запрещен");
 
             if (data == null)
@@ -166,7 +176,8 @@ namespace NebulaMigration.Controllers
             foreach (var dish in data.Goods)
             {
                 var price = dish.PriceOut2.HasValue ? decimal.Parse(dish.PriceOut2.Value.ToString()) : 0;
-                var category = categories.Single(c => c.ExternalId == dish.GroupID || c.Code == dish.GroupID.ToString());
+                var category =
+                    categories.Single(c => c.ExternalId == dish.GroupID || c.Code == dish.GroupID.ToString());
 
                 var current = db.Dishes.FirstOrDefault(c => c.ExternalId == dish.ID);
                 if (current == null)
