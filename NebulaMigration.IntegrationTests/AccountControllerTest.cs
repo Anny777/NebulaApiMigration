@@ -27,14 +27,19 @@ namespace NebulaMigration.IntegrationTests
             var requestDto = new { Username = "admin@nebula.com", Password = "Zxcvbnm,./1" };
             var content =
                 new StringContent(JsonSerializer.Serialize(requestDto), Encoding.UTF8, "application/json");
-            using var response = await Policy
-                .Handle<HttpRequestException>()
+            return await Policy
+                .Handle<Exception>()
                 .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(2 * retryAttempt))
-                .ExecuteAsync(() => this.httpClient.PostAsync($"{Environments.Host}/api/Account", content))
+                .ExecuteAsync(() => this.GetToken(content))
+                .ConfigureAwait(false);
+        }
+
+        private async Task<AuthenticateResponse> GetToken(StringContent content)
+        {
+            using var response = await this.httpClient.PostAsync($"{Environments.Host}/api/Account", content)
                 .ConfigureAwait(false);
             var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var r = JsonSerializer.Deserialize<AuthenticateResponse>(body);
-            return r;
+            return JsonSerializer.Deserialize<AuthenticateResponse>(body);
         }
     }
 }

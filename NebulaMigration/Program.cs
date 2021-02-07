@@ -28,7 +28,7 @@ namespace NebulaMigration
                     .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
         }
 
-        private static void ConfigureAppConfiguration(HostBuilderContext hostBulderContext, IConfigurationBuilder configurationBuilder)
+        private static void ConfigureAppConfiguration(HostBuilderContext hostBuilderContext, IConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.AddJsonFile("./configs.json", true);
         }

@@ -54,7 +54,7 @@ namespace NebulaMigration
                         ValidIssuer = "nebula",
                         ValidAudience = "nebula",
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(this.configuration.GetSection("NebulaApiOptions:SecurityKey")
+                            Encoding.UTF8.GetBytes(this.configuration.GetSection("NebulaAuthorizationOptions:SymmetricSecurityKey")
                                 .Value)),
                     };
                 });
@@ -64,13 +64,11 @@ namespace NebulaMigration
             services.AddMvc(config =>
                 {
                     config.EnableEndpointRouting = false;
-#if !DEBUG
-                var policy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
-                      .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                      .RequireAuthenticatedUser()
-                      .Build();
-                config.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
-#endif
+                    var policy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
+                        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    config.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
@@ -86,6 +84,30 @@ namespace NebulaMigration
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+                
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
         }
 
@@ -105,6 +127,7 @@ namespace NebulaMigration
             app.UseCors(builder =>
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+            app.UseAuthorization();
             app.UseAuthentication();
             // app.UseHttpsRedirection();
             app.UseMvc();

@@ -1,11 +1,11 @@
 namespace NebulaMigration.IntegrationTests
 {
+    using System;
+
     internal static class Environments
     {
-#if DEBUG
-        public static string Host => "http://localhost:5001";
-#else
-        public static string Host => "http://web-api";
-#endif
+        private static bool DotNetRunInContainer => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")?
+            .Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
+        public static string Host => DotNetRunInContainer ? "http://web-api" : "http://localhost:5001";
     }
 }

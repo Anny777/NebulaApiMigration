@@ -39,10 +39,13 @@ namespace NebulaMigration.IntegrationTests
             this.httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"{token.Token_type} {token.Access_token}");
             
             var response = await this.Create(newCategoryToBar);
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
             
             var response2 = await this.Create(newCategoryToKitchen);
-            Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+            Assert.Equal(HttpStatusCode.Created, response2.StatusCode);
+            
+            var response3 = await this.Create(newCategoryToKitchen);
+            Assert.Equal(HttpStatusCode.Conflict, response3.StatusCode);
         }
 
         private async Task<HttpResponseMessage> Create(CreateCategoryCommand newCategoryToBar)

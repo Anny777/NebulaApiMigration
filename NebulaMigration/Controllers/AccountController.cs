@@ -27,6 +27,7 @@
         private readonly NebulaAuthorizationOptions nebulaAuthorizationOptions;
         private readonly UserManager<User> userManager;
 
+        /// <inheritdoc />
         public AccountController(
             IOptions<NebulaAuthorizationOptions> nebulaApiOptions,
             UserManager<User> userManager)
@@ -56,8 +57,6 @@
             }
 
             var encoded = await this.GetToken(user).ConfigureAwait(false);
-
-
             return this.Ok(new AuthenticateResponse(user, encoded));
         }
 
@@ -69,14 +68,15 @@
             claims.Add(new Claim("name", user.UserName));
             claims.Add(new Claim("email", user.Email));
             var issuer = "nebula";
-            return new JwtSecurityTokenHandler().CreateEncodedJwt(
+            return new JwtSecurityTokenHandler()
+                .CreateEncodedJwt(
                 issuer: issuer,
                 audience: issuer,
                 subject: new ClaimsIdentity(claims),
                 notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddDays(14),
                 issuedAt: null,
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(this.nebulaAuthorizationOptions.SymmetricSecurityKey)), SecurityAlgorithms.HmacSha256));
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.nebulaAuthorizationOptions.SymmetricSecurityKey)), SecurityAlgorithms.HmacSha256));
         }
 
         /// <summary>

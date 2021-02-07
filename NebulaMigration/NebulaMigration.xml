@@ -91,6 +91,9 @@
             AccountController.
             </summary>
         </member>
+        <member name="M:NebulaMigration.Controllers.AccountController.#ctor(Microsoft.Extensions.Options.IOptions{NebulaMigration.Options.NebulaAuthorizationOptions},Microsoft.AspNetCore.Identity.UserManager{NebulaMigration.Models.User})">
+            <inheritdoc />
+        </member>
         <member name="M:NebulaMigration.Controllers.AccountController.GetUserInfo(System.String)">
             <summary>
             Gets the user information.
