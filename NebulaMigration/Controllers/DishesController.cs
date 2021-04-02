@@ -44,15 +44,12 @@ namespace NebulaMigration.Controllers
         /// /// </summary>
         /// <returns>List of dish view model.</returns>
         [HttpGet]
-#if !DEBUG
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
-#endif
-        public ActionResult<IEnumerable<DishViewModel>> Get()
+        public ActionResult<IEnumerable<DishViewModel>> Get(CancellationToken cancellationToken)
         {
             return this.Ok(this.db
                 .Dishes
                 .OrderBy(b => b.Name)
-                .ToArray()
                 .Select(this.mapper.Map<DishViewModel>));
         }
 
@@ -61,9 +58,7 @@ namespace NebulaMigration.Controllers
         /// </summary>
         /// <returns>Ответ.</returns>
         [HttpPost]
-#if !DEBUG
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
-#endif
         public async Task<ActionResult> Post(CreateDishCommand dish, CancellationToken cancellationToken)
         {
             var currentDish = await this.db
@@ -94,32 +89,6 @@ namespace NebulaMigration.Controllers
             return result > 0
                 ? CreatedAtAction(nameof(this.Get), new { id = addedDish.Entity.Id }, new { id = addedDish.Entity.Id })
                 : throw new InvalidOperationException("Не удалось добавить блюдо!");
-        }
-
-        /// <summary>
-        /// Смена состояния блюда на готовое
-        /// </summary>
-        /// <param name="id">The id of dish.</param>
-        /// <param name="dishState">The state of dish.</param>
-        /// <param name="ct">The cancellation token.</param>
-        /// <returns>Order.</returns>
-        [HttpPost("SetState")]
-#if !DEBUG
-        [Authorize(Roles = "Admin, Bartender, Cook, Waiter")]
-#endif
-        public async Task<ActionResult<OrderViewModel>> SetState(int id, DishState dishState, CancellationToken ct)
-        {
-            var dish = await this.db.CookingDishes.FindAsync(id).ConfigureAwait(false);
-            if (dish == null)
-            {
-                return this.NotFound("Блюдо не найдено!");
-            }
-
-            dish.DishState = dishState;
-            var result = await db.SaveChangesAsync(ct).ConfigureAwait(false);
-            return result > 0
-                ? Ok(this.mapper.Map<OrderViewModel>(dish))
-                : throw new InvalidOperationException("Не удалось изменить состояние блюда!");
         }
 
         /// <summary>

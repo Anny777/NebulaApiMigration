@@ -8,8 +8,10 @@
         public Guid Id { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
+        public Guid DishId { get; set; }
         public Dish Dish { get; set; }
         public DishState DishState { get; set; }
+        public Guid CustomId { get; set; }
         public Custom Custom { get; set; }
         public string Comment { get; set; }
     }

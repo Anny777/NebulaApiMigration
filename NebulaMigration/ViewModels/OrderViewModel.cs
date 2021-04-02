@@ -17,14 +17,6 @@ namespace NebulaMigration.ViewModels
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the dishes.
-        /// </summary>
-        /// <value>
-        /// The dishes.
-        /// </value>
-        public IEnumerable<DishViewModel> Dishes { get; set; }
-
-        /// <summary>
         /// Gets or sets the table.
         /// </summary>
         /// <value>

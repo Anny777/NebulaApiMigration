@@ -124,6 +124,65 @@
             /// </summary>
             <returns>Результат выполнения операции.</returns>
         </member>
+        <member name="T:NebulaMigration.Controllers.CookingDishesController">
+            <summary>
+            Cooking dishes controller.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CookingDishesController.#ctor(AutoMapper.IMapper,NebulaMigration.ApplicationContext)">
+            <summary>
+            ctor.
+            </summary>
+            <param name="mapper">Mapper.</param>
+            <param name="db">Db context.</param>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CookingDishesController.Get(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Получение списка категорий.
+            /// </summary>
+            <returns>Список категорий блюд.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CookingDishesController.Post(System.Guid,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Добавление блюда к заказу
+            </summary>
+            <param name="dishId">объект блюда</param>
+            <param name="id">идентификатор заказа</param>
+            <param name="ct">The cancellation token.</param>
+            <returns>Order view model.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CookingDishesController.RequestCancellation(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Смена состояния блюда на готовое.
+            </summary>
+            <param name="id">The id of dish.</param>
+            <param name="ct">The cancellation token.</param>
+            <returns>Order.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CookingDishesController.SetReady(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Смена состояния блюда на готовое.
+            </summary>
+            <param name="id">The id of dish.</param>
+            <param name="ct">The cancellation token.</param>
+            <returns>Order.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CookingDishesController.SetTaken(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Смена состояния блюда на забрано.
+            </summary>
+            <param name="id">The id of dish.</param>
+            <param name="ct">The cancellation token.</param>
+            <returns>Order.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.CookingDishesController.SetDeleted(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Смена состояния блюда на удаленное.
+            </summary>
+            <param name="id">The id of dish.</param>
+            <param name="ct">The cancellation token.</param>
+            <returns>Order.</returns>
+        </member>
         <member name="T:NebulaMigration.Controllers.DishController">
             <summary>
             Dish controller.
@@ -138,7 +197,7 @@
             <param name="mapper">The mapper.</param>
             <exception cref="T:System.ArgumentNullException">db.</exception>
         </member>
-        <member name="M:NebulaMigration.Controllers.DishController.Get">
+        <member name="M:NebulaMigration.Controllers.DishController.Get(System.Threading.CancellationToken)">
             <summary>
             Получение списка блюд
             /// </summary>
@@ -150,15 +209,6 @@
             </summary>
             <returns>Ответ.</returns>
         </member>
-        <member name="M:NebulaMigration.Controllers.DishController.SetState(System.Int32,NebulaMigration.Models.Enums.DishState,System.Threading.CancellationToken)">
-            <summary>
-            Смена состояния блюда на готовое
-            </summary>
-            <param name="id">The id of dish.</param>
-            <param name="dishState">The state of dish.</param>
-            <param name="ct">The cancellation token.</param>
-            <returns>Order.</returns>
-        </member>
         <member name="M:NebulaMigration.Controllers.DishController.Sync(NebulaMigration.Models.SyncModel,System.String,System.Threading.CancellationToken)">
             <summary>
             Synchronizes the specified data.
@@ -167,6 +217,77 @@
             <param name="token">The token.</param>
             <param name="ct">The cancellation token.</param>
             <returns>Action result.</returns>
+        </member>
+        <member name="T:NebulaMigration.Controllers.OrderController">
+            <summary>
+            Order controller.
+            </summary>
+        </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.#ctor(NebulaMigration.ApplicationContext,AutoMapper.IMapper)">
+            <summary>
+            ctor.
+            </summary>
+            <param name="db">Db.</param>
+            <param name="mapper">Mapper.</param>
+        </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.Get(System.Threading.CancellationToken)">
+            <summary>
+            Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.Post(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Posts the specified order.
+            </summary>
+            <param name="tableNumber">Table number.</param>
+            <param name="ct">The ct.</param>
+            <returns>Order view model.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.Close(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Закрытие заказа 
+            </summary>
+            <param name="tableNumber">номер стола</param>
+            <param name="ct">Cancellation token.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.AddComment(System.Guid,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Добавление комментария к заказу
+            </summary>
+            <param name="id">Идентификатор заказа.</param>
+            <param name="comment">Комментарий к заказу.</param>
+            <param name="ct">Cancellation token.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.SetExportOrder(System.Int32)">
+            <summary>
+            Проставление флага заказу для его синхронизации
+            </summary>
+            <param name="tableNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.GetExportOrders(System.String)">
+            <summary>
+            Gets the export orders.
+            </summary>
+            <param name="token">The token.</param>
+            <returns>Array of orders.</returns>
+        </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.SetExportedOrders(System.String[],System.String)">
+            <summary>
+            Sets the exported orders.
+            </summary>
+            <param name="HandledOrders">The handled orders.</param>
+            <param name="token">The token.</param>
+            <returns>Action result.</returns>
+        </member>
+        <member name="T:NebulaMigration.Extensions.EnumHelper`1">
+            <summary>
+            Enum helper.
+            </summary>
+            <typeparam name="T">Types.</typeparam>
         </member>
         <member name="T:NebulaMigration.Models.Category">
             <summary>
@@ -208,6 +329,11 @@
             Workshop type.
             </summary>
         </member>
+        <member name="T:NebulaMigration.Models.Enums.DishState">
+            <summary>
+            Состояние готовности блюда.
+            </summary>
+        </member>
         <member name="T:NebulaMigration.Models.ExportDish">
             <summary>
             Dish for export.
@@ -227,6 +353,35 @@
             </summary>
             <value>
             The quantity.
+            </value>
+        </member>
+        <member name="T:NebulaMigration.Models.ExportOrder">
+            <summary>
+            Order for export.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.Models.ExportOrder.TableNumber">
+            <summary>
+            Gets or sets the table number.
+            </summary>
+            <value>
+            The table number.
+            </value>
+        </member>
+        <member name="P:NebulaMigration.Models.ExportOrder.OperatorId">
+            <summary>
+            Gets or sets the operator identifier.
+            </summary>
+            <value>
+            The operator identifier.
+            </value>
+        </member>
+        <member name="P:NebulaMigration.Models.ExportOrder.Dishes">
+            <summary>
+            Gets or sets the dishes.
+            </summary>
+            <value>
+            The dishes.
             </value>
         </member>
         <member name="T:NebulaMigration.Models.SyncModel">
@@ -249,21 +404,6 @@
             <value>
             The categories.
             </value>
-        </member>
-        <member name="P:NebulaMigration.Models.ResetPasswordViewModel.UserId">
-            <summary>
-            Gets or sets the user identifier.
-            </summary>
-        </member>
-        <member name="P:NebulaMigration.Models.ResetPasswordViewModel.Token">
-            <summary>
-            Gets or sets the token.
-            </summary>
-        </member>
-        <member name="P:NebulaMigration.Models.ResetPasswordViewModel.NewPassword">
-            <summary>
-            Gets or sets of new password.
-            </summary>
         </member>
         <member name="T:NebulaMigration.Options.NebulaApiOptions">
             <summary>
@@ -356,42 +496,47 @@
             Work shop type.
             </summary>
         </member>
-        <member name="F:NebulaMigration.ViewModels.DishViewModel.CookingDishId">
+        <member name="T:NebulaMigration.ViewModels.CookingDishViewModel">
             <summary>
-            Идентификатор заказанного блюда
+            Cooking dish view model
             </summary>
         </member>
-        <member name="F:NebulaMigration.ViewModels.DishViewModel.Name">
+        <member name="P:NebulaMigration.ViewModels.CookingDishViewModel.Id">
+            <summary>
+            Identifier.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.CookingDishViewModel.DishName">
+            <summary>
+            Name of dish.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.CookingDishViewModel.DishState">
+            <summary>
+            Cooking state.
+            </summary>
+        </member>
+        <member name="P:NebulaMigration.ViewModels.DishViewModel.Name">
             <summary>
             Название блюда
             </summary>
         </member>
-        <member name="F:NebulaMigration.ViewModels.DishViewModel.Consist">
+        <member name="P:NebulaMigration.ViewModels.DishViewModel.Consist">
             <summary>
             Состав блюда
             </summary>
         </member>
-        <member name="F:NebulaMigration.ViewModels.DishViewModel.Unit">
+        <member name="P:NebulaMigration.ViewModels.DishViewModel.Unit">
             <summary>
             Единица измерения
             </summary>
         </member>
-        <member name="F:NebulaMigration.ViewModels.DishViewModel.State">
-            <summary>
-            Состояние блюда
-            </summary>
-        </member>
-        <member name="F:NebulaMigration.ViewModels.DishViewModel.Comment">
+        <member name="P:NebulaMigration.ViewModels.DishViewModel.Comment">
             <summary>
             Комментарий к блюду
             </summary>
         </member>
-        <member name="F:NebulaMigration.ViewModels.DishViewModel.WorkshopType">
-            <summary>
-            Цех
-            </summary>
-        </member>
-        <member name="F:NebulaMigration.ViewModels.DishViewModel.Price">
+        <member name="P:NebulaMigration.ViewModels.DishViewModel.Price">
             <summary>
             Цена блюда
             </summary>
@@ -407,14 +552,6 @@
             </summary>
             <value>
             The identifier.
-            </value>
-        </member>
-        <member name="P:NebulaMigration.ViewModels.OrderViewModel.Dishes">
-            <summary>
-            Gets or sets the dishes.
-            </summary>
-            <value>
-            The dishes.
             </value>
         </member>
         <member name="P:NebulaMigration.ViewModels.OrderViewModel.Table">
@@ -449,115 +586,20 @@
               <c>true</c> if this instance is export requested; otherwise, <c>false</c>.
             </value>
         </member>
-        <member name="T:NebulaApi.Controllers.OrderController">
+        <member name="P:NebulaMigration.ViewModels.ResetPasswordViewModel.UserId">
             <summary>
-            Order controller.
+            Gets or sets the user identifier.
             </summary>
         </member>
-        <member name="M:NebulaApi.Controllers.OrderController.#ctor(NebulaMigration.ApplicationContext,AutoMapper.IMapper)">
+        <member name="P:NebulaMigration.ViewModels.ResetPasswordViewModel.Token">
             <summary>
-            ctor.
-            </summary>
-            <param name="db">Db.</param>
-            <param name="mapper">Mapper.</param>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Get(System.Threading.CancellationToken)">
-            <summary>
-            Получение открытых заказов (официант, кухня и бар будут брать блюда отсюда)
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Get(System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            Получение заказа по номеру стола
-            </summary>
-            <param name="table">номер стола</param>
-            <param name="ct">Cancellation token.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Post(NebulaMigration.ViewModels.OrderViewModel,System.Threading.CancellationToken)">
-            <summary>
-            Posts the specified order.
-            </summary>
-            <param name="order">The order.</param>
-            <param name="ct">The ct.</param>
-            <returns>Order view model.</returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Post(NebulaMigration.ViewModels.DishViewModel,System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            Добавление блюда к заказу
-            </summary>
-            <param name="dish">объект блюда</param>
-            <param name="idOrder">идентификатор заказа</param>
-            <param name="ct">The cancellation token.</param>
-            <returns>Order view model.</returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.Close(System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            Закрытие заказа 
-            </summary>
-            <param name="tableNumber">номер стола</param>
-            <param name="ct">Cancellation token.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.AddComment(NebulaMigration.ViewModels.OrderViewModel,System.Threading.CancellationToken)">
-            <summary>
-            Добавление комментария к заказу
-            </summary>
-            <param name="order"></param>
-            <param name="ct">Cancellatin token.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.SetExportOrder(System.Int32)">
-            <summary>
-            Проставление флага заказу для его синхронизации
-            </summary>
-            <param name="tableNumber"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.GetExportOrders(System.String)">
-            <summary>
-            Gets the export orders.
-            </summary>
-            <param name="token">The token.</param>
-            <returns>Array of orders.</returns>
-        </member>
-        <member name="M:NebulaApi.Controllers.OrderController.SetExportedOrders(System.String[],System.String)">
-            <summary>
-            Sets the exported orders.
-            </summary>
-            <param name="HandledOrders">The handled orders.</param>
-            <param name="token">The token.</param>
-            <returns>Action result.</returns>
-        </member>
-        <member name="T:NebulaApi.Models.ExportOrder">
-            <summary>
-            Order for export.
+            Gets or sets the token.
             </summary>
         </member>
-        <member name="P:NebulaApi.Models.ExportOrder.TableNumber">
+        <member name="P:NebulaMigration.ViewModels.ResetPasswordViewModel.NewPassword">
             <summary>
-            Gets or sets the table number.
+            Gets or sets of new password.
             </summary>
-            <value>
-            The table number.
-            </value>
-        </member>
-        <member name="P:NebulaApi.Models.ExportOrder.OperatorId">
-            <summary>
-            Gets or sets the operator identifier.
-            </summary>
-            <value>
-            The operator identifier.
-            </value>
-        </member>
-        <member name="P:NebulaApi.Models.ExportOrder.Dishes">
-            <summary>
-            Gets or sets the dishes.
-            </summary>
-            <value>
-            The dishes.
-            </value>
         </member>
     </members>
 </doc>

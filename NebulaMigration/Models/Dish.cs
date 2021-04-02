@@ -8,6 +8,7 @@
         public int ExternalId { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
+        public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public string Consist { get; set; }
         public string Unit { get; set; }

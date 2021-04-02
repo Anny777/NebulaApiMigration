@@ -1,4 +1,4 @@
-﻿namespace NebulaMigration.Models
+﻿namespace NebulaMigration.ViewModels
 {
     public class ResetPasswordViewModel
     {

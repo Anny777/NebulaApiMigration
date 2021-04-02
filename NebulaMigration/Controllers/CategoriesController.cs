@@ -10,7 +10,6 @@ namespace NebulaMigration.Controllers
 {
     using System;
     using Commands;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Models;
 
     /// <summary>
@@ -30,8 +29,8 @@ namespace NebulaMigration.Controllers
         /// <param name="db">db.</param>
         public CategoryController(IMapper mapper, ApplicationContext db)
         {
-            this.db = db ?? throw new System.ArgumentNullException(nameof(db));
-            this.mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
+            this.db = db ?? throw new ArgumentNullException(nameof(db));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         /// <summary>
@@ -39,19 +38,17 @@ namespace NebulaMigration.Controllers
         /// /// </summary>
         /// <returns>Список категорий блюд.</returns>
         [HttpGet]
-#if !DEBUG
         [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin")]
-#endif
         public async Task<ActionResult<IEnumerable<CategoryViewModel>>> Get()
         {
             var data = await this.db
                 .Categories
                 .OrderBy(b => b.Name)
+                .Select(c => this.mapper.Map<CategoryViewModel>(c))
                 .ToListAsync()
                 .ConfigureAwait(false);
-            return this.Ok(data
-                .Select(this.mapper.Map<CategoryViewModel>)
-                .ToArray());
+            
+            return this.Ok(data);
         }
 
         /// <summary>
@@ -59,25 +56,24 @@ namespace NebulaMigration.Controllers
         /// /// </summary>
         /// <returns>Результат выполнения операции.</returns>
         [HttpPost]
-#if !DEBUG
         [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin")]
-#endif
         public async Task<ActionResult> Post(CreateCategoryCommand category)
         {
             var currentCategory = await this.db
                 .Categories
-                .FirstOrDefaultAsync(c => c.Name == category.Name)
+                .FirstOrDefaultAsync(c => c.Name.ToUpperInvariant() == category.Name.ToUpperInvariant())
                 .ConfigureAwait(false);
 
             if (currentCategory != null)
             {
-                return this.Conflict("Категория уже существует!");
+                return this.Conflict($"Категория {category.Name} уже существует!");
             }
 
             var addedCategory = await this.db.AddAsync(this.mapper.Map<Category>(category)).ConfigureAwait(false);
             var result = await this.db.SaveChangesAsync().ConfigureAwait(false);
             return result > 0
-                ? this.CreatedAtAction(nameof(this.Get), new { id = addedCategory.Entity.Id }, new { id = addedCategory.Entity.Id })
+                ? this.CreatedAtAction(nameof(this.Get), new { id = addedCategory.Entity.Id },
+                    new { id = addedCategory.Entity.Id })
                 : throw new InvalidOperationException("Не удалось добавить категорию!");
         }
     }

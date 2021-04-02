@@ -1,6 +1,4 @@
-using NebulaMigration.Models;
-
-namespace NebulaApi.Models
+namespace NebulaMigration.Models
 {
     /// <summary>
     /// Order for export.
