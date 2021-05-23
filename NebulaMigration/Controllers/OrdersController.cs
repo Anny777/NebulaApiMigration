@@ -7,8 +7,11 @@
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Server.IIS.Core;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Models.Enums;
@@ -49,11 +52,30 @@
                 .Include(i => i.CookingDishes)
                 .ThenInclude(c => c.Dish)
                 .Where(c => c.IsOpened)
-                .Select(c => this.mapper.Map<OrderViewModel>(c))
+                .ProjectTo<OrderViewModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(ct)
                 .ConfigureAwait(false);
 
             return this.Ok(orders);
+        }
+
+        /// <summary>
+        /// Get custom by id.
+        /// </summary>
+        /// <param name="id">The id of custom.</param>
+        /// <param name="ct">The cancellationToken.</param>
+        /// <returns>Custom or not found.</returns>
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<OrderViewModel>> Get(Guid id, CancellationToken ct)
+        {
+            var order = await this.db.Customs.FirstOrDefaultAsync(c => c.Id == id, ct)
+                .ConfigureAwait(false);
+            if (order != null)
+            {
+                return this.Ok(this.mapper.Map<OrderViewModel>(order));
+            }
+
+            return this.NotFound();
         }
 
         /// <summary>
@@ -87,22 +109,24 @@
         /// <param name="tableNumber">номер стола</param>
         /// <param name="ct">Cancellation token.</param>
         /// <returns></returns>
-        [HttpPatch]
+        [HttpPatch("Close/{id:guid}")]
         [Authorize(Roles = "Bartender, Admin")]
         public async Task<ActionResult> Close(Guid id, CancellationToken ct)
         {
             var order = await this.db.Customs
+                .Include(c => c.CookingDishes)
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsOpened && c.IsActive, ct)
                 .ConfigureAwait(false);
 
-            this.CloseOrder(order);
-            var saveResult = await this.db.SaveChangesAsync(ct).ConfigureAwait(false);
-            if (saveResult > 0)
+            if (order == null)
             {
-                return this.Ok();
+                return this.NotFound();
             }
 
-            return this.NotFound();
+            this.CloseOrder(order);
+            var saveResult = await this.db.SaveChangesAsync(ct).ConfigureAwait(false);
+            return saveResult > 0 ? this.Ok() : this.StatusCode((int) HttpStatusCode.InternalServerError);
         }
 
         /// <summary>
@@ -116,25 +140,18 @@
         [Authorize(Roles = "Waiter, Bartender, Cook, Admin")]
         public async Task<ActionResult> AddComment(Guid id, string comment, CancellationToken ct)
         {
-            try
+            var custom = await this.db.Customs.FindAsync(id, ct).ConfigureAwait(false);
+            if (custom != null)
             {
-                var o = await this.db.Customs.FindAsync(id, ct).ConfigureAwait(false);
-                if (o != null)
+                custom.Comment += Environment.NewLine + comment;
+                var saveResult = await this.db.SaveChangesAsync(ct).ConfigureAwait(false);
+                if (saveResult > 0)
                 {
-                    o.Comment += Environment.NewLine + comment;
-                    var saveResult = await this.db.SaveChangesAsync(ct).ConfigureAwait(false);
-                    if (saveResult > 0)
-                    {
-                        return this.Ok();
-                    }
+                    return this.Ok();
                 }
+            }
 
-                return this.NotFound("Заказ не найден.");
-            }
-            catch (Exception ex)
-            {
-                return this.BadRequest(ex.Message);
-            }
+            return this.NotFound("Заказ не найден.");
         }
 
         /// <summary>

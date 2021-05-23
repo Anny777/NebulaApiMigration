@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
     using System.Security.Claims;
     using System.Text;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -16,6 +16,7 @@
     using NebulaMigration.Models;
     using NebulaMigration.Options;
     using NebulaMigration.ViewModels;
+    using JsonClaimValueTypes = Microsoft.IdentityModel.JsonWebTokens.JsonClaimValueTypes;
 
     /// <summary>
     /// AccountController.
@@ -64,7 +65,7 @@
         {
             var claims = new List<Claim>();
             claims.AddRange(await this.userManager.GetClaimsAsync(user).ConfigureAwait(false));
-            claims.AddRange((await this.userManager.GetRolesAsync(user).ConfigureAwait(false)).Select(role => new Claim("roles", role)));
+            claims.Add(await this.GetRoles(user).ConfigureAwait(false));
             claims.Add(new Claim("name", user.UserName));
             claims.Add(new Claim("email", user.Email));
             var issuer = "nebula";
@@ -77,6 +78,12 @@
                 expires: DateTime.UtcNow.AddDays(14),
                 issuedAt: null,
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.nebulaAuthorizationOptions.SymmetricSecurityKey)), SecurityAlgorithms.HmacSha256));
+        }
+
+        private async Task<Claim> GetRoles(User user)
+        {
+            var roles = await this.userManager.GetRolesAsync(user).ConfigureAwait(false);
+            return new Claim("roles", JsonSerializer.Serialize(roles), JsonClaimValueTypes.JsonArray);
         }
 
         /// <summary>

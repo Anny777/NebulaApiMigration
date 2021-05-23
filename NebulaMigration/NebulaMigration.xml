@@ -236,6 +236,14 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:NebulaMigration.Controllers.OrderController.Get(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get custom by id.
+            </summary>
+            <param name="id">The id of custom.</param>
+            <param name="ct">The cancellationToken.</param>
+            <returns>Custom or not found.</returns>
+        </member>
         <member name="M:NebulaMigration.Controllers.OrderController.Post(System.Int32,System.Threading.CancellationToken)">
             <summary>
             Posts the specified order.
