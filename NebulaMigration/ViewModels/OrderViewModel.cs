@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NebulaMigration.Models;
+using System;
 using System.Collections.Generic;
 
 namespace NebulaMigration.ViewModels
@@ -22,7 +23,7 @@ namespace NebulaMigration.ViewModels
         /// <value>
         /// The table.
         /// </value>
-        public int Table { get; set; }
+        public int TableNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the created date.
@@ -39,6 +40,22 @@ namespace NebulaMigration.ViewModels
         /// The comment.
         /// </value>
         public string Comment { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cooking dishes.
+        /// </summary>
+        /// <value>
+        /// The cooking dishes.
+        /// </value>
+        public ICollection<CookingDish> CookingDishes { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is opened.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is opened; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsOpened { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is export requested.
