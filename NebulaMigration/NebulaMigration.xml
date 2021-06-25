@@ -586,21 +586,10 @@
             The comment.
             </value>
         </member>
-        <member name="P:NebulaMigration.ViewModels.OrderViewModel.CookingDishes">
+        <member name="P:NebulaMigration.ViewModels.OrderViewModel.ReadyDishesCount">
             <summary>
-            Gets or sets the cooking dishes.
+            Количество готовых блюд для вывода бэйджа над столом.
             </summary>
-            <value>
-            The cooking dishes.
-            </value>
-        </member>
-        <member name="P:NebulaMigration.ViewModels.OrderViewModel.IsOpened">
-            <summary>
-            Gets or sets a value indicating whether this instance is opened.
-            </summary>
-            <value>
-              <c>true</c> if this instance is opened; otherwise, <c>false</c>.
-            </value>
         </member>
         <member name="P:NebulaMigration.ViewModels.OrderViewModel.IsExportRequested">
             <summary>

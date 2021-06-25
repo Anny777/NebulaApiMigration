@@ -42,20 +42,9 @@ namespace NebulaMigration.ViewModels
         public string Comment { get; set; }
 
         /// <summary>
-        /// Gets or sets the cooking dishes.
+        /// Количество готовых блюд для вывода бэйджа над столом.
         /// </summary>
-        /// <value>
-        /// The cooking dishes.
-        /// </value>
-        public ICollection<CookingDish> CookingDishes { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is opened.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is opened; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsOpened { get; set; }
+        public int ReadyDishesCount { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is export requested.
